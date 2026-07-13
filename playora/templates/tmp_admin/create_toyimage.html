@@ -1,0 +1,50 @@
+{% comment %} {% extends 'tmp_admin/master.html' %}
+{% load static %}
+{% block content %}  
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Form elements</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"  >Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Form elements </li>
+                </ol>
+              </nav>
+            </div>
+              <form method="post" enctype="multipart/form-data">
+              {%csrf_token%}              
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Toy Image</h4>
+                    <p class="card-description"> form</p>
+                    <form class="forms-sample">
+                      <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Toy</label>
+                        <div class="col-sm-9">
+                          <select class="form-select" name="toy" id="floatingSelect" aria-label="Floating label select example">
+                              <option selected>Open this select menu</option>
+                              {% for r in toy %}
+                              <option value="{{r.id}}">{{r.name}}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="Inputfile" class="col-sm-3 col-form-label">Image</label>
+                        <div class="col-sm-9">
+                          <input type="file" name="image" class="form-control" required />
+                        </div>
+                      </div>
+                      {% comment %} uploaded_at is auto-managed by Django and should not be entered manually in this form. {% endcomment %}
+                      {% comment %} <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+          </div>
+        </div> {% endcomment %}
+           

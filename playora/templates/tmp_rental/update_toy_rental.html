@@ -1,0 +1,199 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}  
+    {% comment %}  {% endcomment %}
+      
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Form elements</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"  >Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Form elements </li>
+                </ol>
+              </nav>
+            </div>
+              <form method="post" enctype="multipart/form-data">
+              {%csrf_token%}              
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Toy</h4>
+                    <p class="card-description">Toy form</p>
+                    <form class="forms-sample">
+                  
+                      {% comment %} <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Id</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="id" class="form-control" />
+                        </div>
+                      </div> {% endcomment %}
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Category</label>
+                        <div class="col-sm-9">
+                        <select class="form-select" name="category" id="categorySelect" aria-label="Floating label select example">
+                              <option selected value="">Open this select menu</option>
+                              {% for c in category %}
+                              <option value="{{c.id}}" {% if c.id == toy.category.id %}selected{% endif %}>{{c.name}}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                    </div>
+                      
+                    {% comment %} <input type="text" name="category" class="form-control" id="exampleInputtext" placeholder="category" /> {% endcomment %}
+
+
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">SubCategory</label>
+                        <div class="col-sm-9">
+                          <select class="form-select" name="subcategory" id="subcategorySelect" aria-label="Floating label select example">
+                              <option value="">Open this select menu</option>
+                              {% for s in subcategory %}
+                              <option value="{{s.id}}" data-category="{{s.category_id}}" {% if s.id == toy.subcategory.id %}selected{% endif %}>{{s.name}}</option>
+                              {% endfor %}
+                          </select> 
+                        </div>
+                    </div>
+
+                  {% comment %} <input type="text" name="subcategory" class="form-control" id="exampleInputtext" placeholder="subcategory" /> {% endcomment %}
+
+
+                    <div class="form-group row">
+                        <label for="eInputtext" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="name" class="form-control" id="exampleInputtext" placeholder="Name"  />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="description" class="form-control"  id="exampleInputtext" placeholder="Description" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Brand</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="brand" class="form-control" id="exampleInputtext" placeholder="brand" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Age_group</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="age_group" class="form-control" id="exampleInputtext" placeholder="age....." />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Rental_price_per_day</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="rental_price_per_day" class="form-control" id="exampleInputnumber" placeholder="rental_price_per_day" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Security_deposit</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="security_deposit" class="form-control" id="exampleInputnumber" placeholder="deposit for toys !" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Stock_quantity</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="stock_quantity" class="form-control" id="exampleInputnumber" placeholder="stock  quantity" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Available_quantity</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="available_quantity" class="form-control" id="exampleInputnumber" placeholder="available  quantity" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Condition</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="condition" class="form-control" id="exampleInputtext" placeholder="condition" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputfile" class="col-sm-3 col-form-label">Image</label>
+                        <div class="col-sm-9">
+                          <input type="file" name="image" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="is_available">Is_available</label>
+                        <div class="col-sm-9 d-flex align-items-center">
+                          <input type="checkbox" id="is_available" name="is_available" class="form-check-input" {% if toy.is_available %}checked{% endif %} />
+                        </div>
+                    </div>
+                      
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Created_at</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" value="{{ toy.created_at|date:'Y-m-d H:i' }}" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Update_at</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" value="{{ toy.update_at|date:'Y-m-d H:i' }}" readonly />
+                        </div>
+                    </div>
+                      
+                      {% comment %} <div class="form-group row">
+                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password" />
+                        </div>
+                      </div> {% endcomment %}
+                  
+                      <button type="submit" class="btn btn-primary mr-2" > Submit </button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              const categorySelect = document.getElementById("categorySelect");
+              const subcategorySelect = document.getElementById("subcategorySelect");
+              
+              // Store all original subcategory options
+              const originalSubcategories = Array.from(subcategorySelect.options);
+              
+              function updateSubcategories() {
+                const selectedCategoryId = categorySelect.value;
+                
+                // Keep the current selection if valid
+                const currentSelection = subcategorySelect.value;
+                
+                // Clear current subcategories
+                subcategorySelect.innerHTML = "";
+                
+                originalSubcategories.forEach(option => {
+                  // Always show the default "Open this select menu" option
+                  if (option.value === "") {
+                    subcategorySelect.appendChild(option);
+                  } 
+                  // Show options that match the selected category
+                  else if (option.getAttribute("data-category") === selectedCategoryId) {
+                    subcategorySelect.appendChild(option);
+                  }
+                });
+                
+                // Restore selection if it still exists in the new list
+                if (Array.from(subcategorySelect.options).some(opt => opt.value === currentSelection)) {
+                  subcategorySelect.value = currentSelection;
+                }
+              }
+    
+              // Initial run to show correct subcategories for the already-selected category
+              updateSubcategories();
+              
+              // Listen for category changes
+              categorySelect.addEventListener("change", updateSubcategories);
+            });
+          </script>
+          {% comment %}  {% endcomment %}
+          {% endblock %}

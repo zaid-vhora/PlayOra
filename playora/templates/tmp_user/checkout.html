@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – PlayOra</title>
+  <link rel="icon" type="image/x-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+  <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+  <style>
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .payment-option {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .payment-option.active,
+    .payment-option:hover {
+      border-color: var(--primary);
+      background: rgba(255, 107, 53, 0.03);
+    }
+
+    .payment-radio {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .section-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .section-card-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media(max-width:767px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header-inject"></div>
+
+  <div class="breadcrumb-section">
+    <div class="container">
+      <h1 class="breadcrumb-title">Checkout</h1>
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index_view' %}">Home</a></li>
+        <li class="breadcrumb-sep">›</li>
+        <li class="breadcrumb-item"><a href="{% url 'cart_view' %}">Cart</a></li>
+        <li class="breadcrumb-sep">›</li>
+        <li class="breadcrumb-item active">Checkout</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <!-- Steps -->
+      <div class="checkout-steps">
+        <div class="step done">
+          <div class="step-num">✓</div><span class="step-label">Cart</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+          <div class="step-num">2</div><span class="step-label">Details</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">3</div><span class="step-label">Payment</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">4</div><span class="step-label">Confirm</span>
+        </div>
+      </div>
+
+      <form method="POST" action="{% url 'checkout_view' %}">
+        {% csrf_token %}
+        <div class="checkout-layout">
+          <div>
+            <!-- Contact Info -->
+            <div class="section-card fade-in">
+              <div class="section-card-title">👤 Contact Information</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div class="form-group"><label class="form-label">First Name *</label><input class="form-control"
+                    type="text" name="first_name" placeholder="First Name"
+                    value="{% if request.user.is_authenticated %}{{ request.user.first_name }}{% endif %}" required>
+                </div>
+                <div class="form-group"><label class="form-label">Last Name *</label><input class="form-control"
+                    type="text" name="last_name" placeholder="Last Name"
+                    value="{% if request.user.is_authenticated %}{{ request.user.last_name }}{% endif %}" required>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label">Email Address *</label>
+                <div class="input-icon-wrap"><span class="input-icon">✉️</span><input class="form-control" type="email"
+                    name="email" placeholder="Email Address"
+                    value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}" required></div>
+              </div>
+              <div class="form-group"><label class="form-label">Phone Number *</label>
+                <div class="input-icon-wrap"><span class="input-icon">📞</span><input class="form-control" type="tel"
+                    name="phone" placeholder="Phone Number"
+                    value="{% if request.user.is_authenticated %}{{ request.user.phone }}{% endif %}" required></div>
+              </div>
+            </div>
+
+            <!-- Delivery Address -->
+            <div class="section-card fade-in stagger-1">
+              <div class="section-card-title">📍 Delivery Address</div>
+              <div class="form-group"><label class="form-label">Address Line 1 *</label><input class="form-control"
+                  type="text" name="address" placeholder="House/Flat No, Building Name"
+                  value="{% if request.user.is_authenticated %}{{ request.user.address }}{% endif %}" required></div>
+              <div class="form-group"><label class="form-label">Address Line 2</label><input class="form-control"
+                  type="text" name="address2" placeholder="Street, Area" value=""></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div class="form-group"><label class="form-label">City *</label><input class="form-control" type="text"
+                    name="city" placeholder="City"
+                    value="{% if request.user.is_authenticated %}{{ request.user.city }}{% endif %}" required></div>
+                <div class="form-group"><label class="form-label">PIN Code *</label><input class="form-control"
+                    type="text" name="pincode" placeholder="PIN Code"
+                    value="{% if request.user.is_authenticated %}{{ request.user.pincode }}{% endif %}" required></div>
+              </div>
+              <div class="form-group"><label class="form-label">State *</label>
+                <select class="form-control form-select">
+                  <option selected>Maharashtra</option>
+                  <option>Karnataka</option>
+                  <option>Delhi</option>
+                  <option>Tamil Nadu</option>
+                  <option>Gujarat</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Delivery Date *</label><input class="form-control"
+                  type="date" name="delivery_date" required></div>
+              <div class="form-group"><label class="form-label">Delivery Instructions</label><textarea
+                  class="form-control" name="instructions" rows="3"
+                  placeholder="Leave at door, ring bell twice, etc."></textarea></div>
+            </div>
+
+            <!-- Payment -->
+            <div class="section-card fade-in stagger-2">
+              <div class="section-card-title">💳 Payment Method</div>
+
+              <div class="payment-option active" onclick="selectPayment(this)">
+                <input type="radio" class="payment-radio" name="payment" checked>
+                <span style="font-size:22px">📱</span>
+                <div>
+                  <div style="font-weight:800;font-size:14px">UPI Payment</div>
+                  <div style="font-size:12px;color:var(--text-muted)">GPay, PhonePe, Paytm, BHIM</div>
+                </div>
+              </div>
+
+              <div class="payment-option" onclick="selectPayment(this)">
+                <input type="radio" class="payment-radio" name="payment">
+                <span style="font-size:22px">💳</span>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Credit / Debit Card</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Visa, Mastercard, RuPay</div>
+                </div>
+              </div>
+
+              <div class="payment-option" onclick="selectPayment(this)">
+                <input type="radio" class="payment-radio" name="payment">
+                <span style="font-size:22px">🏦</span>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Net Banking</div>
+                  <div style="font-size:12px;color:var(--text-muted)">All major Indian banks</div>
+                </div>
+              </div>
+
+              <div class="payment-option" onclick="selectPayment(this)">
+                <input type="radio" class="payment-radio" name="payment">
+                <span style="font-size:22px">💵</span>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Cash on Delivery</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Pay when toys arrive</div>
+                </div>
+              </div>
+
+              <!-- UPI Input (shown by default) -->
+              <div id="upiInput" style="margin-top:16px">
+                <div class="form-group"><label class="form-label">UPI ID</label>
+                  <div class="input-icon-wrap"><span class="input-icon">@</span><input class="form-control" type="text"
+                      placeholder="yourname@upi"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary fade-in">
+            <h3 style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:20px">Order Summary</h3>
+
+            <!-- Items -->
+            <div style="margin-bottom:16px">
+              {% for key, value in cart.items %}
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                {% if value.image %}
+                <img src="{{ value.image }}" style="width:50px;height:50px;border-radius:10px;object-fit:cover"
+                  alt="{{ value.name }}">
+                {% else %}
+                <div
+                  style="width:50px;height:50px;border-radius:10px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">
+                  🧸</div>
+                {% endif %}
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:700;color:var(--dark)">{{ value.name }}</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Qty: {{ value.quantity }}</div>
+                </div>
+                <span style="font-weight:800;color:var(--primary)">₹{% widthratio value.price 1 value.quantity %}</span>
+              </div>
+              {% empty %}
+              <div style="font-size:13px;color:var(--text-muted);text-align:center;">Your cart is empty.</div>
+              {% endfor %}
+            </div>
+
+            <div class="order-row"><span class="label">Subtotal</span><span class="value">₹{{ cart_total_amount}}</span></div>
+            <div class="order-row"><span class="label">Delivery</span><span class="value"
+                style="color:var(--secondary-dark)">FREE</span></div>
+            <div class="order-row"><span class="label">Security Deposit</span><span class="value">₹{{ security_deposit}}</span></div>
+            <div class="order-row total"><span class="label">Total Payable</span><span class="value">₹{{ total_payable}}</span></div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;margin:8px 0 20px">*₹{{ security_deposit}} deposit fully refundable on return...</div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">🔒 Place
+              Order · ₹{{ total_payable }}
+            </button>
+
+            <div style="text-align:center;font-size:12px;color:var(--text-muted);font-weight:600;margin-top:12px">🔒
+              256-bit SSL encrypted · 100% secure
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div id="footer-inject"></div>
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = "{{ cart_count|default:0 }}";
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+  <script src="{% static 'sta_user/js/main.js' %}"></script>
+  <script>
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      el.querySelector('input[type=radio]').checked = true;
+    }
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}
+
+    
+        
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">rental Tables</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> rental tables </li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">RENTAL Table</h4>
+                    <p class="card-description"> ADD <code> category</code>
+                    </p>
+                     <div class="table-responsive" style="display: block !important;">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>rental_number</th>
+                            <th>user_name</th>
+                            <th>toy</th>
+                            <th>quantity</th>
+                            <th>rental_start_date</th>
+                            <th>rental_end_date</th>
+                            <th>actual_return_date</th>
+                            <th>total_days</th>
+                            <th>rental_amount</th>
+                            <th>security_deposit</th>
+                            <th>late_fee</th>
+                            <th>discount_amount</th>
+                            <th>total_amount</th>
+                            <th>status</th>
+                            <th>payment_status</th>
+                            <th>created_at</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for r in ren %}
+                          <tr>
+                            <th>{{forloop.counter}}</th>
+                             <td>{{r.rental_number}}</td>
+                            <td>{{r.user_name}}</td>
+                            {% comment %} <td><img src="{{r.image.url}}" height="20px" width="200px"></td> {% endcomment %}
+                            <td>{{r.toy}}</td>
+                            <td>{{r.quantity}}</td>
+                            <td>{{r.rental_start_date}}</td>
+                            <td>{{r.rental_end_date}}</td>
+                            <td>{{r.actual_return_date}}</td>
+                            <td>{{r.total_days}}</td>
+                            <td>{{r.rental_amount}}</td>
+                            <td>{{r.security_deposit}}</td>
+                            <td>{{r.late_fee}}</td>
+                            <td>{{r.discount_amount}}</td>
+                            <td>{{r.total_amount}}</td>
+                            <td>{{r.status}}</td>
+                            <td>{{r.payment_status}}</td>
+                            <td>{{r.created_at}}</td>
+
+                            
+                          </tr>
+                          {% endfor %}
+                          
+                          
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>      
+    
+               {% endblock %}

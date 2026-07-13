@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+ {% load static %} 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services – PlayOra</title>
+<link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+<link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+<style>
+.plan-card{background:white;border:2px solid var(--border);border-radius:var(--radius-xl);padding:36px;text-align:center;transition:var(--transition-bounce);position:relative;}
+.plan-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-xl);}
+.plan-card.featured{border-color:var(--primary);background:linear-gradient(135deg,#FFF8F5,white);}
+.plan-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;padding:4px 20px;border-radius:50px;font-size:12px;font-weight:800;white-space:nowrap;}
+.plan-name{font-family:var(--font-display);font-size:22px;color:var(--dark);margin-bottom:8px;}
+.plan-price{font-family:var(--font-display);font-size:48px;color:var(--primary);line-height:1;}
+.plan-period{font-size:14px;color:var(--text-muted);font-weight:700;}
+.plan-feature{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-light);margin-bottom:10px;text-align:left;font-weight:600;}
+.plan-feature.no{opacity:0.4;text-decoration:line-through;}
+</style>
+</head>
+<body data-page="services">
+<div id="header-inject"></div>
+
+<div class="breadcrumb-section">
+  <div class="container">
+    <h1 class="breadcrumb-title">Our Services</h1>
+    <ul class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-sep">›</li>
+      <li class="breadcrumb-item active">Services</li>
+    </ul>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:white">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:56px">
+      <div class="section-badge">⚡ Simple Process</div>
+      <h2 class="section-title">How <span>PlayOra</span> Works</h2>
+      <p class="section-subtitle" style="margin:0 auto">From browsing to playing in 4 simple steps.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" class="fade-in">
+      <div style="text-align:center;padding:32px 20px;background:var(--bg-light);border-radius:var(--radius-xl)">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(255,107,53,0.3)">🔍</div>
+        <div style="background:var(--primary);color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 12px">1</div>
+        <h3 style="font-weight:800;font-size:17px;color:var(--dark);margin-bottom:8px">Browse & Select</h3>
+        <p style="font-size:13px;color:var(--text-light);line-height:1.7">Explore 5,000+ toys filtered by age, category, duration & price.</p>
+      </div>
+      <div style="text-align:center;padding:32px 20px;background:var(--bg-light);border-radius:var(--radius-xl)">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--secondary),#6EE7E0);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(78,205,196,0.3)">🛒</div>
+        <div style="background:var(--secondary);color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 12px">2</div>
+        <h3 style="font-weight:800;font-size:17px;color:var(--dark);margin-bottom:8px">Book Online</h3>
+        <p style="font-size:13px;color:var(--text-light);line-height:1.7">Choose rental duration, pay securely. UPI, cards, net banking accepted.</p>
+      </div>
+      <div style="text-align:center;padding:32px 20px;background:var(--bg-light);border-radius:var(--radius-xl)">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--purple),#D8A8FF);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(199,125,255,0.3)">🚀</div>
+        <div style="background:var(--purple);color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 12px">3</div>
+        <h3 style="font-weight:800;font-size:17px;color:var(--dark);margin-bottom:8px">We Deliver</h3>
+        <p style="font-size:13px;color:var(--text-light);line-height:1.7">Sanitized & packaged toys delivered within 24-48 hours to your door.</p>
+      </div>
+      <div style="text-align:center;padding:32px 20px;background:var(--bg-light);border-radius:var(--radius-xl)">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,#FFE66D,#FFD93D);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(255,230,109,0.4)">🔄</div>
+        <div style="background:#FFD93D;color:var(--dark);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 12px">4</div>
+        <h3 style="font-weight:800;font-size:17px;color:var(--dark);margin-bottom:8px">Play & Return</h3>
+        <p style="font-size:13px;color:var(--text-light);line-height:1.7">Play, explore, love it! Return when done or extend. Buy option available.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING PLANS -->
+{% comment %} <section class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:48px">
+      <div class="section-badge">💰 Flexible Pricing</div>
+      <h2 class="section-title">Choose Your <span>Plan</span></h2>
+      <p class="section-subtitle" style="margin:0 auto">Flexible rental options for every family. No commitments. Cancel anytime.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start" class="fade-in">
+      <!-- Basic -->
+      <div class="plan-card">
+        <div style="font-size:40px;margin-bottom:12px">🌱</div>
+        <div class="plan-name">Starter</div>
+        <div style="margin:16px 0">
+          <div class="plan-price">₹149</div>
+          <div class="plan-period">per toy / per week</div>
+        </div>
+        <div style="margin:24px 0;text-align:left">
+          <div class="plan-feature">✅ Rent any 1 toy</div>
+          <div class="plan-feature">✅ 1 week rental</div>
+          <div class="plan-feature">✅ Free delivery & pickup</div>
+          <div class="plan-feature">✅ Sanitized guarantee</div>
+          <div class="plan-feature no">❌ Extension discount</div>
+          <div class="plan-feature no">❌ Early access to new toys</div>
+          <div class="plan-feature no">❌ Priority support</div>
+        </div>
+        <a href="/shop_view/" class="btn btn-outline" style="width:100%;justify-content:center">Get Started</a>
+      </div>
+
+      <!-- Popular -->
+      <div class="plan-card featured">
+        <div class="plan-badge">⭐ MOST POPULAR</div>
+        <div style="font-size:40px;margin-bottom:12px">🚀</div>
+        <div class="plan-name">Family</div>
+        <div style="margin:16px 0">
+          <div class="plan-price">₹499</div>
+          <div class="plan-period">per month · up to 3 toys</div>
+        </div>
+        <div style="margin:24px 0;text-align:left">
+          <div class="plan-feature">✅ Rent up to 3 toys/month</div>
+          <div class="plan-feature">✅ Swap toys anytime</div>
+          <div class="plan-feature">✅ Free delivery & pickup</div>
+          <div class="plan-feature">✅ Sanitized guarantee</div>
+          <div class="plan-feature">✅ 10% extension discount</div>
+          <div class="plan-feature">✅ Early access to new toys</div>
+          <div class="plan-feature no">❌ Dedicated toy curator</div>
+        </div>
+        <a href="/register_view/" class="btn btn-primary" style="width:100%;justify-content:center">Start Free Trial 🎉</a>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:600">First month free · No credit card needed</div>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan-card">
+        <div style="font-size:40px;margin-bottom:12px">👑</div>
+        <div class="plan-name">Premium</div>
+        <div style="margin:16px 0">
+          <div class="plan-price">₹999</div>
+          <div class="plan-period">per month · unlimited toys</div>
+        </div>
+        <div style="margin:24px 0;text-align:left">
+          <div class="plan-feature">✅ Unlimited toys/month</div>
+          <div class="plan-feature">✅ Swap anytime, same day</div>
+          <div class="plan-feature">✅ Free express delivery</div>
+          <div class="plan-feature">✅ Sanitized guarantee</div>
+          <div class="plan-feature">✅ 20% extension discount</div>
+          <div class="plan-feature">✅ Early access to new toys</div>
+          <div class="plan-feature">✅ Dedicated toy curator</div>
+        </div>
+        <a href="/register_view/" class="btn btn-dark" style="width:100%;justify-content:center">Go Premium 👑</a>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:24px;font-size:14px;color:var(--text-muted);font-weight:600">All plans include our sanitization guarantee · Cancel or pause anytime · No hidden fees</p>
+  </div>
+</section> {% endcomment %}
+
+<!-- SERVICES LIST -->
+<section class="section" style="background:white">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:48px">
+      <div class="section-badge">🎯 What We Offer</div>
+      <h2 class="section-title">All Our <span>Services</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" class="fade-in">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,107,53,0.1)">🧸</div>
+        <h3 class="feature-title">Toy Rental</h3>
+        <p class="feature-desc">Rent individual toys by the week or month. Perfect for trying before committing, or just variety.</p>
+        <a href="/shop_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Browse Toys →</a>
+      </div>
+      <div class="feature-card">
+        {% comment %} <div class="feature-icon" style="background:rgba(78,205,196,0.1)">🎂</div>
+        <h3 class="feature-title">Party Packages</h3>
+        <p class="feature-desc">Planning a birthday? Rent a full party toy package with games, activity kits, and prizes for 48 hours.</p>
+        <a href="/contact_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Enquire Now →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,230,109,0.2)">🏫</div>
+        <h3 class="feature-title">School & Daycare</h3>
+        <p class="feature-desc">Monthly bulk rental packages for schools, daycares, and playgroups with special institutional pricing.</p>
+        <a href="/contact_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Get Quote →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(199,125,255,0.15)">🔄</div>
+        <h3 class="feature-title">Toy Subscription</h3>
+        <p class="feature-desc">Monthly curated toy boxes selected by our child development experts based on your child's age and interests.</p>
+        <a href="/register_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Subscribe →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(168,230,207,0.3)">💰</div>
+        <h3 class="feature-title">Sell Old Toys</h3>
+        <p class="feature-desc">Have toys collecting dust? Sell them to ToyRent. We evaluate, sanitize, and add them to our library.</p>
+        <a href="/contact_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Sell Now →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,107,53,0.08)">🎁</div>
+        <h3 class="feature-title">Gift Cards</h3>
+        <p class="feature-desc">Give the gift of play! ToyRent gift cards from ₹500–₹5,000. Perfect for birthdays and baby showers.</p>
+        <a href="/shop_view/" class="btn btn-outline btn-sm" style="margin-top:16px">Buy Gift Card →</a>
+      </div>
+    </div>
+  </div> {% endcomment %}
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container container-sm">
+    <div class="text-center" style="margin-bottom:40px">
+      <div class="section-badge">❓ FAQ</div>
+      <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+    </div>
+    <div class="fade-in" id="faqList">
+      <div class="faq-item" style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden">
+        <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">
+          How do I return the toys? <span class="faq-arrow" style="font-size:18px;transition:transform 0.2s">▾</span>
+        </button>
+        <div class="faq-body" style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">
+          Simply schedule a return pickup through your account or call us. We'll collect the toys from your address on the scheduled date — no need to visit any office or drop point.
+        </div>
+      </div>
+      <div class="faq-item" style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden">
+        <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">
+          Are the toys really clean and sanitized? <span class="faq-arrow" style="font-size:18px;transition:transform 0.2s">▾</span>
+        </button>
+        <div class="faq-body" style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">
+          Absolutely. Every toy goes through a 4-step process: visual inspection, deep cleaning with child-safe products, UV sanitization, and quality check. We include a sanitization certificate with every order.
+        </div>
+      </div>
+      <div class="faq-item" style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden">
+        <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">
+          What if my child damages a toy? <span class="faq-arrow" style="font-size:18px;transition:transform 0.2s">▾</span>
+        </button>
+        <div class="faq-body" style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">
+          Normal wear is completely covered. For significant damage, we'll assess and may charge a partial replacement fee (typically 20-40% of retail price). We're always fair and transparent about this.
+        </div>
+      </div>
+      <div class="faq-item" style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden">
+        <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">
+          Can I buy the toy if my child loves it? <span class="faq-arrow" style="font-size:18px;transition:transform 0.2s">▾</span>
+        </button>
+        <div class="faq-body" style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">
+          Yes! If your child loves a toy and you'd like to keep it, just let us know. We offer a buy option with a discount, and we'll deduct the rental fees you've already paid. Win-win!
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-inject"></div>
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+<script src="{% static 'sta_user/js/main.js' %}"></script>
+<script>
+function toggleFAQ(btn) {
+  const body = btn.nextElementSibling;
+  const arrow = btn.querySelector('.faq-arrow');
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+</script>
+</body>
+</html>

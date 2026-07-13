@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Categories – PlayOra</title>
+  <link rel="icon" type="image/x-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+  <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+  <style>
+    /* Dedicated categories page grid adjustment for better responsiveness */
+    .cat-grid-full {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    
+    .cat-card-full {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 32px 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition-bounce);
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .cat-card-full:hover {
+      border-color: var(--primary);
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .cat-img-wrapper {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 8px;
+      border: 4px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .cat-card-full:hover .cat-img-wrapper {
+      border-color: var(--primary-light);
+      transform: scale(1.05);
+    }
+
+    .cat-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cat-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+    }
+
+    .cat-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    .cat-description {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body data-page="categories">
+  <div id="header-inject"></div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-section">
+    <div class="container">
+      <h1 class="breadcrumb-title">Browse Categories</h1>
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-sep">›</li>
+        <li class="breadcrumb-item active">Categories</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:56px">
+        <div class="section-badge">🗂️ Library</div>
+        <h2 class="section-title">Explore by <span>Interest</span></h2>
+        <p class="section-subtitle" style="margin:0 auto">Find the perfect toys for your child's developmental needs and passions.</p>
+      </div>
+
+      <div class="cat-grid-full fade-in">
+        {% for i in cat %}
+        <a href="/toy_view/?cat={{ i.id }}" class="cat-card-full">
+          <div class="cat-img-wrapper">
+            {% if i.image %}
+            <img src="{{i.image.url}}" alt="{{i.name}}">
+            {% else %}
+            <div class="cat-placeholder">
+              <span>🧸</span>
+            </div>
+            {% endif %}
+          </div>
+          <h3 class="cat-title">{{i.name}}</h3>
+          {% if i.description %}
+          <p class="cat-description">{{ i.description|truncatewords:10 }}</p>
+          {% endif %}
+          <span class="btn btn-sm btn-outline">Browse Toys</span>
+        </a>
+        {% empty %}
+        <div class="text-center" style="grid-column: 1 / -1; padding: 40px;">
+          <p>No categories found.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-inject"></div>
+    <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+  <script src="{% static 'sta_user/js/main.js' %}"></script>
+</body>
+
+</html>

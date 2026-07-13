@@ -1,0 +1,13 @@
+@login_required(login_url="/login")
+def cancel_rental(request, pk):
+    rental_req = get_object_or_404(models.RentalRequest, id=pk, user=request.user)
+    
+    # Allow cancellation only if status is PENDING or ACCEPTED
+    if rental_req.status in ['PENDING', 'ACCEPTED']:
+        rental_req.status = 'REJECTED'  # Or 'CANCELLED' if you have that status
+        rental_req.save()
+        messages.success(request, f"Order #{pk} has been cancelled successfully.")
+    else:
+        messages.error(request, "This order cannot be cancelled at its current stage.")
+        
+    return redirect('my_orders_view')

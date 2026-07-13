@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cart – PlayOra</title>
+  <link rel="icon" type="image/x-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+  <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+</head>
+
+<body data-page="cart">
+  <div id="header-inject"></div>
+
+  <div class="breadcrumb-section">
+    <div class="container">
+      <h1 class="breadcrumb-title">My Cart</h1>
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-sep">›</li>
+        <li class="breadcrumb-item active">Cart</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      {% if cart %}
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start">
+        <!-- Cart Items -->
+        <div>
+          <div
+            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+            <h2 style="font-size:22px;font-weight:800;color:var(--dark)">🛒 Cart Items <span
+                style="color:var(--text-muted);font-size:16px">({{ cart|length }} items)</span></h2>
+            <a href="{% url 'cart_clear' %}" class="btn btn-outline btn-sm"
+              style="color:#FF4757;border-color:#FF4757;text-decoration:none">🗑️ Clear Cart</a>
+          </div>
+
+          {% for key, value in cart.items %}
+          <div class="cart-item">
+            {% if value.image %}
+            <img class="cart-item-img" src="{{ value.image }}" alt="{{ value.name }}">
+            {% else %}
+            <div class="cart-item-img"
+              style="background:#f0f0f0; display:flex; align-items:center; justify-content:center;">🧸</div>
+            {% endif %}
+            <div class="cart-item-details">
+              <div class="cart-item-name">{{ value.name }}</div>
+              <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px">
+                <div class="qty-control">
+                  <a href="{% url 'item_decrement' value.product_id %}" class="qty-btn"
+                    style="text-decoration:none">−</a>
+                  <span class="qty-num">{{ value.quantity }}</span>
+                  <a href="{% url 'item_increment' value.product_id %}" class="qty-btn"
+                    style="text-decoration:none">+</a>
+                </div>
+                <a href="{% url 'item_clear' value.product_id %}"
+                  style="text-decoration:none;color:#FF4757;font-weight:700;font-size:13px">Remove</a>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div class="cart-item-price">₹{{ value.price }}</div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- Continue Shopping -->
+          <div style="margin-top:24px">
+            <a href="/shop_view/" class="btn btn-outline">← Continue Shopping</a>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary fade-in">
+          <h3 style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:20px">Order Summary</h3>
+          <div class="order-row"><span class="label">Subtotal</span><span class="value">₹{{ cart_total_amount }}</span>
+          </div>
+          <div class="order-row"><span class="label">Delivery</span><span class="value"
+              style="color:var(--secondary-dark)">FREE 🎉</span></div>
+          <div class="order-row total"><span class="label">Total</span><span class="value">₹{{ cart_total_amount }}</span></div>
+
+          <a href="/checkout_view/" class="btn btn-primary btn-lg"
+            style="width:100%;justify-content:center;margin-bottom:12px;margin-top:20px">Proceed to Checkout →</a>
+          <div style="text-align:center;font-size:12px;color:var(--text-muted);font-weight:600">🔒 Secure & Encrypted
+            Checkout</div>
+        </div>
+      </div>
+      {% else %}
+      <div class="text-center" style="padding: 60px 0;">
+        <div style="font-size: 60px; margin-bottom: 20px;">🛒</div>
+        <h2 style="font-weight: 800; color: var(--dark);">Your Cart is Empty</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">Looks like you haven't added any toys yet.</p>
+        <a href="/shop_view/" class="btn btn-primary">Start Browsing</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <div id="footer-inject"></div>
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = "{{ cart_count|default:0 }}";
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+  <script src="{% static 'sta_user/js/main.js' %}"></script>
+</body>
+
+</html>

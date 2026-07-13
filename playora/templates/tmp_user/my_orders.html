@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | PlayOra</title>
+    <link rel="icon" type="image/x-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+    <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css">
+    <style>
+        body {
+            background-color: var(--off-white);
+            padding-top: 80px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar Styling */
+        .dashboard-sidebar {
+            background: white;
+            padding: 40px 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .user-avatar {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-family: var(--font-heading);
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 16px rgba(255, 107, 53, 0.2);
+        }
+
+        .user-name {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .user-role {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dash-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 32px;
+        }
+
+        .dash-menu-item {
+            margin-bottom: 8px;
+        }
+
+        .dash-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .dash-link i {
+            font-size: 20px;
+        }
+
+        .dash-link:hover,
+        .dash-link.active {
+            background: var(--bg-light);
+            color: var(--primary);
+        }
+
+        /* Content Area Styling */
+        .dashboard-main {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 26px;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        /* Order Card Styling */
+        .order-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 100px 1fr 220px;
+            gap: 24px;
+            align-items: flex-start;
+            transition: var(--transition);
+        }
+
+        .order-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .order-img {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            background: var(--bg-light);
+        }
+
+        .order-details h4 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            color: var(--dark);
+            margin: 0 0 8px 0;
+        }
+
+        .order-meta {
+            display: flex;
+            gap: 16px;
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .order-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .order-meta i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-pending {
+            background: #FFF4E5;
+            color: #D68D00;
+        }
+
+        .badge-accepted {
+            background: #E6F6EC;
+            color: #278E56;
+        }
+
+        .badge-paid {
+            background: #E8F2FF;
+            color: #0061D6;
+        }
+
+        .badge-rejected {
+            background: #FFEEEE;
+            color: #D62D2D;
+        }
+
+        .provider-tag {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Payment Interaction Area */
+        .payment-action {
+            background: #fcfcfc;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .payment-select:focus {
+            border-color: var(--primary);
+        }
+
+        .card-form {
+            margin-top: 8px;
+            display: none;
+        }
+
+        .card-input {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 8px;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+
+        .btn-pay {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-pay:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-pay:disabled {
+            background: var(--gray-200);
+            color: var(--gray-600);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .invoice-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            text-align: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .invoice-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-main {
+                padding: 24px;
+            }
+
+            .order-card {
+                grid-template-columns: 1fr;
+            }
+
+            .order-img {
+                width: 100%;
+                height: 200px;
+            }
+        }
+
+        /* Journey Progress (User Side) */
+        .order-journey {
+            margin-top: 32px;
+            padding: 24px;
+            background: #fdfdfd;
+            border: 1px solid #f0f0f0;
+            border-radius: 16px;
+            grid-column: 1 / span 3;
+        }
+
+        .journey-status-msg {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 5px;
+        }
+
+        .journey-status-msg i {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .journey-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 20px 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            right: 30px;
+            height: 3px;
+            background: #f1f5f9;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .journey-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .step-icon-wrapper {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border: 2px solid #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #cbd5e1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .journey-step.active .step-icon-wrapper {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.1);
+            background: #fff5f2;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.15);
+        }
+
+        .journey-step.completed .step-icon-wrapper {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 107, 53, 0.2);
+            animation: user-pulse 2s infinite;
+            display: none;
+        }
+
+        .journey-step.active .pulse-ring {
+            display: block;
+        }
+
+        @keyframes user-pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            70% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .journey-step.active .step-label,
+        .journey-step.completed .step-label {
+            color: var(--dark);
+        }
+
+        /* Extension Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .ext-modal {
+            background: white;
+            padding: 32px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: modal-up 0.3s ease-out;
+        }
+
+        @keyframes modal-up {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .ext-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .week-option {
+            border: 2px solid var(--border);
+            padding: 12px;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .week-option.selected {
+            border-color: var(--primary);
+            background: #fff5f2;
+            color: var(--primary);
+        }
+
+        .week-option label {
+            display: block;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .week-option span {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-inject"></div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="user-info">
+                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                <h3 class="user-name">{{ user.username }}</h3>
+                <span class="user-role">Member since {{ user.date_joined|date:"Y" }}</span>
+            </div>
+
+            <ul class="dash-menu">
+                <li class="dash-menu-item">
+                    <a href="/profile_view/" class="dash-link">
+                        <i class="mdi mdi-account-circle-outline"></i> My Profile
+                    </a>
+                </li>
+                <li class="dash-menu-item">
+                    <a href="/my_orders/" class="dash-link active">
+                        <i class="mdi mdi-package-variant-closed"></i> My Rentals
+                    </a>
+                </li>
+                <li class="dash-menu-item">
+                    <a href="/wishlist_view/" class="dash-link">
+                        <i class="mdi mdi-heart-outline"></i> Wishlist
+                    </a>
+                </li>
+                <li class="dash-menu-item" style="margin-top: 24px;">
+                    <a href="{% url 'logout' %}" class="dash-link" style="color: #FF4757;">
+                        <i class="mdi mdi-logout-variant"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="section-header">
+                <h3 class="section-title">Rental Dashboard</h3>
+                <span style="font-size: 14px; font-weight: 700; color: var(--text-muted);">{{ requests.count }}
+                    Orders</span>
+            </div>
+
+            {% for req in requests %}
+            <div class="order-card">
+                {% if req.toy.image %}
+                <img src="{{ req.toy.image.url }}" class="order-img" alt="">
+                {% else %}
+                <div class="order-img"
+                    style="display:flex; align-items:center; justify-content:center; font-size:40px;">🧸</div>
+                {% endif %}
+
+                <div class="order-details">
+                    <h4>{{ req.toy.name }}</h4>
+                    <div class="order-meta">
+                        <span><i class="mdi mdi-calendar-blank"></i> {{ req.created_at|date:"d M, Y" }}</span>
+                        <span><i class="mdi mdi-currency-inr"></i> ₹{{ req.total_price }}</span>
+                        {% if req.rental_end_date %}
+                        <span style="color: var(--primary);"><i class="mdi mdi-clock-end"></i> Return: <strong>{{ req.rental_end_date|date:"d M, Y" }}</strong></span>
+                        {% endif %}
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
+                        <span class="badge badge-{{ req.status|lower }}">{{ req.status }}</span>
+                        {% if req.is_extension %}
+                        <span class="badge" style="background: #EBEBFF; color: #5E5CE6;">EXTENSION REQUEST</span>
+                        {% endif %}
+                    </div>
+
+                    {% if req.status == 'PAID' or req.status == 'SHIPPED' or req.status == 'DELIVERING' or req.status == 'COMPLETED' %}
+                    {% if not req.is_extension %}
+                    <button class="btn btn-outline-primary btn-sm"
+                        style="padding: 6px 16px; border-radius: 50px; font-weight: 800; font-size: 11px; margin-bottom: 12px;"
+                        onclick="showExtendModal({{ req.id }}, '{{ req.toy.name }}')">
+                        <i class="mdi mdi-calendar-plus"></i> Extend Rental
+                    </button>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if req.rental_provider %}
+                    <div class="provider-tag">
+                        <i class="mdi mdi-storefront-outline"></i>
+                        <span>Provider: <strong>
+                                {% if req.rental_provider.first_name %}
+                                {{ req.rental_provider.first_name }} {{ req.rental_provider.last_name }}
+                                {% else %}
+                                {{ req.rental_provider.username }}
+                                {% endif %}
+                            </strong></span>
+                        {% if req.rental_provider.phone %}
+                        <span style="color: var(--primary); margin-left: 8px;"><i class="mdi mdi-phone-outline"></i> {{req.rental_provider.phone }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if req.status != 'PENDING' and req.status != 'REJECTED' %}
+                    <div class="order-journey">
+                        <div class="journey-status-msg">
+                            <i class="mdi mdi-truck-delivery"></i>
+                            {% if req.status == 'ACCEPTED' %}Preparing your order...
+                            {% elif req.status == 'PAID' %}Payment received! Getting it ready to ship.
+                            {% elif req.status == 'SHIPPED' %}On the way! Toy is currently in transit.
+                            {% elif req.status == 'DELIVERING' %}Almost there! Out for delivery in your city.
+                            {% elif req.status == 'COMPLETED' %}Delivered! Enjoy your playtime.
+                            {% endif %}
+                        </div>
+                        <div class="journey-timeline">
+                            <!-- Step 1: Placed -->
+                            <div class="journey-step completed">
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-cart-outline"></i>
+                                </div>
+                                <span class="step-label">Placed</span>
+                            </div>
+
+                            <!-- Step 2: Confirmed -->
+                            <div
+                                class="journey-step {% if req.status == 'ACCEPTED' %}active{% else %}completed{% endif %}">
+                                <div class="pulse-ring"></div>
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-check"></i>
+                                </div>
+                                <span class="step-label">Confirmed</span>
+                            </div>
+
+                            <!-- Step 3: Paid -->
+                            <div
+                                class="journey-step {% if req.status == 'PAID' %}active{% elif req.status == 'SHIPPED' or req.status == 'DELIVERING' or req.status == 'COMPLETED' %}completed{% endif %}">
+                                <div class="pulse-ring"></div>
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-credit-card-outline"></i>
+                                </div>
+                                <span class="step-label">Paid</span>
+                            </div>
+
+                            <!-- Step 4: Shipped -->
+                            <div
+                                class="journey-step {% if req.status == 'SHIPPED' %}active{% elif req.status == 'DELIVERING' or req.status == 'COMPLETED' %}completed{% endif %}">
+                                <div class="pulse-ring"></div>
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-truck-fast-outline"></i>
+                                </div>
+                                <span class="step-label">Shipped</span>
+                            </div>
+
+                            <!-- Step 5: Arriving -->
+                            <div
+                                class="journey-step {% if req.status == 'DELIVERING' %}active{% elif req.status == 'COMPLETED' %}completed{% endif %}">
+                                <div class="pulse-ring"></div>
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-map-marker-radius-outline"></i>
+                                </div>
+                                <span class="step-label">Arriving</span>
+                            </div>
+
+                            <!-- Step 6: Done -->
+                            <div class="journey-step {% if req.status == 'COMPLETED' %}completed{% endif %}">
+                                <div class="step-icon-wrapper">
+                                    <i class="mdi mdi-home-heart"></i>
+                                </div>
+                                <span class="step-label">Done</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="payment-action">
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: var(--dark);">
+                        <span>Total Due</span>
+                        <span style="color: var(--primary);">₹{{ req.total_price|add:req.security_deposit }}</span>
+                    </div>
+                    <p style="font-size: 10px; color: var(--text-muted); margin: -4px 0 8px 0; font-weight: 600;">
+                        (Incl.₹{{ req.security_deposit }} security deposit)</p>
+
+                    {% if req.status == 'ACCEPTED' %}
+                    <select class="payment-select" id="pay-method-{{ req.id }}"
+                        onchange="togglePaymentArea({{ req.id }})">
+                        <option value="">Select Method...</option>
+                        <option value="CARD">💳 Online Card</option>
+                        <option value="COD">💵 Cash on Delivery</option>
+                    </select>
+
+                    <div id="card-form-{{ req.id }}" class="card-form">
+                        <input type="text" id="card-num-{{ req.id }}" class="card-input"
+                            placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="card-exp-{{ req.id }}" class="card-input" placeholder="MM/YY"
+                                maxlength="5" oninput="formatExp(this)">
+                            <input type="password" id="card-cvv-{{ req.id }}" class="card-input" placeholder="CVV"
+                                maxlength="3" oninput="checkVal({{ req.id }})">
+                        </div>
+                    </div>
+
+                    <button id="pay-btn-{{ req.id }}" class="btn-pay" disabled onclick="handlePay({{ req.id }})">
+                        Confirm Order
+                    </button>
+
+                    <form id="pay-form-{{ req.id }}" action="{% url 'initiate_payment' req.id %}" method="POST"
+                        style="display: none;">
+                        {% csrf_token %}
+                        <input type="hidden" name="payment_method" id="method-input-{{ req.id }}">
+                    </form>
+                    {% elif req.status == 'PENDING' %}
+                    <div
+                        style="text-align: center; padding: 12px; background: #fffcf5; border-radius: 12px; border: 1px dashed #ffeaa7;">
+                        <span style="font-size: 12px; font-weight: 800; color: #d6a317;">Awaiting Approval from
+                            {{req.rental_provider.username }}</span>
+                    </div>
+                    {% elif req.status == 'PAID' or req.status == 'SHIPPED' or req.status == 'DELIVERING' or req.status == 'COMPLETED' %}
+                    <div
+                        style="text-align: center; color: var(--secondary); font-weight: 800; font-size: 14px; margin-bottom: 8px;">
+                        <i class="mdi mdi-check-decagram"></i> Paid & Confirmed
+                    </div>
+                    <a href="{% url 'generate_invoice' req.id %}" target="_blank" class="invoice-btn">
+                        <i class="mdi mdi-file-download-outline"></i> Invoice
+                    </a>
+                    {% elif req.status == 'REJECTED' %}
+                    <div style="text-align: center; color: #FF4757; font-weight: 800; font-size: 14px;">
+                        <i class="mdi mdi-close-circle-outline"></i> Declined
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align:center; padding:80px 0;">
+                <div style="font-size: 64px; margin-bottom: 24px; opacity:0.2;">🛒</div>
+                <h4 style="font-family: var(--font-heading); color: var(--text-muted);">No rental orders yet</h4>
+                <br>
+                <a href="/shop_view/" class="btn btn-primary">Start Exploring</a>
+            </div>
+            {% endfor %}
+        </main>
+    </div>
+
+    <div id="footer-inject"></div>
+
+    <script>
+        window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+        window.USER_NAME = "{{ request.user.username }}";
+        window.CART_COUNT = {{ cart_count|default:0 }};
+    </script>
+    <script src="{% static 'sta_user/js/components.js' %}"></script>
+    <script src="{% static 'sta_user/js/main.js' %}"></script>
+
+    <script>
+        function togglePaymentArea(id) {
+            const method = document.getElementById('pay-method-' + id).value;
+            const cardForm = document.getElementById('card-form-' + id);
+            const btn = document.getElementById('pay-btn-' + id);
+
+            if (method === 'CARD') {
+                cardForm.style.display = 'block';
+                checkVal(id);
+            } else if (method === 'COD') {
+                cardForm.style.display = 'none';
+                btn.disabled = false;
+            } else {
+                cardForm.style.display = 'none';
+                btn.disabled = true;
+            }
+        }
+
+        function formatCard(input) {
+            let v = input.value.replace(/\D/g, '').match(/.{1,4}/g);
+            input.value = v ? v.join(' ') : '';
+            checkVal(input.id.split('-').pop());
+        }
+
+        function formatExp(input) {
+            let v = input.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
+            input.value = v;
+            checkVal(input.id.split('-').pop());
+        }
+
+        function checkVal(id) {
+            const method = document.getElementById('pay-method-' + id).value;
+            const btn = document.getElementById('pay-btn-' + id);
+            if (method !== 'CARD') return;
+
+            const num = document.getElementById('card-num-' + id).value.replace(/\s/g, '');
+            const exp = document.getElementById('card-exp-' + id).value;
+            const cvv = document.getElementById('card-cvv-' + id).value;
+
+            btn.disabled = !(num.length === 16 && /^\d{2}\/\d{2}$/.test(exp) && cvv.length === 3);
+        }
+
+        function handlePay(id) {
+            const method = document.getElementById('pay-method-' + id).value;
+            const btn = document.getElementById('pay-btn-' + id);
+            btn.innerHTML = '<i class="mdi mdi-loading mdi-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                document.getElementById('method-input-' + id).value = method;
+                document.getElementById('pay-form-' + id).submit();
+            }, 1500);
+        }
+    </script>
+
+    <!-- Extension Modal -->
+    <div id="extendModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="ext-modal" onclick="event.stopPropagation()">
+            <h3 class="ext-title">Extend Rental</h3>
+            <p id="ext-toy-name" style="font-size: 14px; color: var(--text-muted); font-weight: 600;"></p>
+
+            <p style="margin-top: 20px; font-size: 12px; font-weight: 800; color: var(--dark);">SELECT DURATION:</p>
+            <div class="weeks-grid">
+                <div class="week-option selected" onclick="selectWeek(this, 1)">
+                    <label>1 Week</label>
+                    <span>+7 Days</span>
+                </div>
+                <div class="week-option" onclick="selectWeek(this, 2)">
+                    <label>2 Weeks</label>
+                    <span>+14 Days</span>
+                </div>
+                <div class="week-option" onclick="selectWeek(this, 3)">
+                    <label>3 Weeks</label>
+                    <span>+21 Days</span>
+                </div>
+            </div>
+
+            <form id="extendForm" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="weeks" id="ext-weeks-input" value="1">
+                <button type="submit" class="btn-pay" style="width: 100%;">
+                    Confirm Extension
+                </button>
+            </form>
+            <button onclick="closeExtendModal()"
+                style="width: 100%; margin-top: 10px; background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 12px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        function showExtendModal(id, name) {
+            document.getElementById('ext-toy-name').innerText = name;
+            document.getElementById('extendForm').action = `/extend_rental/${id}/`;
+            document.getElementById('extendModal').style.display = 'flex';
+        }
+
+        function closeExtendModal() {
+            document.getElementById('extendModal').style.display = 'none';
+        }
+
+        function closeModal(e) {
+            if (e.target.id === 'extendModal') closeExtendModal();
+        }
+
+        function selectWeek(el, weeks) {
+            document.querySelectorAll('.week-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('ext-weeks-input').value = weeks;
+        }
+    </script>
+</body>
+
+</html>

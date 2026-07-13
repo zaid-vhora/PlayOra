@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | PlayOra</title>
+    <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --text-dark: #2D3436;
+            --text-light: #636E72;
+            --border: #DFE6E9;
+            --radius-lg: 20px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #F8FAFC;
+            margin: 0;
+            padding-top: 80px;
+        }
+
+        .profile-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .profile-sidebar {
+            background: white;
+            padding: 40px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            text-align: center;
+            height: fit-content;
+        }
+
+        .profile-img-wrap {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 4px solid #FFF;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .sidebar-role {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .sidebar-menu-item {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .sidebar-link.active, .sidebar-link:hover {
+            background: rgba(255, 107, 53, 0.08);
+            color: var(--primary);
+        }
+
+        .profile-main {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #F1F1F1;
+            padding-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #A0AEC0;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .info-item.full {
+            grid-column: span 2;
+        }
+
+        .btn-edit {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .logout-btn-wrap {
+            margin-top: 30px;
+        }
+        
+        .btn-logout {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: #FFEDED;
+            color: #C62828;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            text-align: center;
+            transition: 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: #FFDADA;
+        }
+
+        @media (max-width: 900px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-inject"></div>
+
+    <div class="profile-wrapper">
+        <div class="profile-container">
+            <aside class="profile-sidebar">
+                <div class="profile-img-wrap">
+                    {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="Profile Image">
+                    {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=FF6B35&color=fff&size=200" alt="Avatar">
+                    {% endif %}
+                </div>
+                <h2 class="sidebar-name">{{ user.first_name }} {{ user.last_name }}</h2>
+                <span class="sidebar-role">Standard {{ user.get_role_display }}</span>
+
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item"><a href="#" class="sidebar-link active">👤 My Profile</a></li>
+                    <li class="sidebar-menu-item"><a href="/my_orders/" class="sidebar-link">📦 My Orders</a></li>
+                    <li class="sidebar-menu-item"><a href="/wishlist_view/" class="sidebar-link">❤️ Wishlist</a></li>
+                    <li class="sidebar-menu-item"><a href="#" class="sidebar-link">⚙️ Account Settings</a></li>
+                </ul>
+
+                <div class="logout-btn-wrap">
+                    <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+                </div>
+            </aside>
+
+            <main class="profile-main">
+                <div class="section-header">
+                    <h3 class="section-title">Personal Information</h3>
+                    <a href="{% url 'profile_edit_view' %}" class="btn-edit">Edit Profile</a>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Username</label>
+                        <div class="info-value">@{{ user.username }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Email Address</label>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Phone Number</label>
+                        <div class="info-value">{{ user.phone|default:"Not Provided" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Date of Birth</label>
+                        <div class="info-value">{{ user.date_of_birth|default:"Not Provided" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Gender</label>
+                        <div class="info-value">{{ user.gender|default:"Not Provided" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>City / Location</label>
+                        <div class="info-value">{{ user.city|default:"Not Provided" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Pincode</label>
+                        <div class="info-value">{{ user.pincode|default:"Not Provided" }}</div>
+                    </div>
+                    <div class="info-item full">
+                        <label>Home Address</label>
+                        <div class="info-value">{{ user.address|default:"Not Provided" }}</div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top: 50px;">
+                    <h3 class="section-title">Account Security</h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Account Status</label>
+                        <div class="info-value">
+                            <span style="color: #48BB78;">●</span> Active
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <label>Member Since</label>
+                        <div class="info-value">{{ user.created_at|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="footer-inject"></div>
+
+      <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+    <script src="{% static 'sta_user/js/main.js' %}"></script>
+    <script>
+        // Pass auth state to components
+        window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+        window.USER_NAME = "{{ request.user.username }}";
+    </script>
+</body>
+</html>

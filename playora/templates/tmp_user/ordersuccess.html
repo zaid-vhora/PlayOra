@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+ {% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed! – PlayOra</title>
+<link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+<link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+<style>
+@keyframes popIn { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+@keyframes confetti { 0%{transform:translateY(-100%) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+.confetti-piece { position:fixed; width:10px; height:10px; top:-10px; animation:confetti 3s linear forwards; border-radius:2px; }
+.success-icon { animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+</style>
+</head>
+<body>
+<div id="header-inject"></div>
+
+<section style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFF5EF,#FFF0E8);padding:100px 20px 60px">
+  <div style="text-align:center;max-width:600px;width:100%">
+    <div class="success-icon" style="width:100px;height:100px;background:linear-gradient(135deg,var(--secondary),#6EE7E0);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 24px;box-shadow:0 12px 40px rgba(78,205,196,0.4)">✓</div>
+
+    <h1 style="font-family:var(--font-display);font-size:42px;color:var(--dark);margin-bottom:8px">
+      {% if requests.0.status == 'PENDING' %}Request Sent! ⏳
+      {% elif requests.0.status == 'ACCEPTED' %}Request Accepted! 🎉
+      {% elif requests.0.status == 'PAID' %}Order Confirmed! 🎁
+      {% else %}Request {{ requests.0.status|title }}!{% endif %}
+    </h1>
+    <p style="font-size:18px;color:var(--text-light);margin-bottom:8px">
+      {% if requests.0.status == 'PENDING' %}Your rental request has been sent to the provider(s).
+      {% elif requests.0.status == 'ACCEPTED' %}Good news! Your request has been approved.
+      {% elif requests.0.status == 'PAID' %}Thank you for your payment. Your toys are being prepared!
+      {% else %}There was an update to your request.{% endif %}
+    </p>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px">
+      {% if requests.0.status == 'PENDING' %}Once they accept, you'll be able to proceed with the payment.
+      {% elif requests.0.status == 'ACCEPTED' %}You can now complete the payment to finalize your order.
+      {% elif requests.0.status == 'PAID' %}You can track your delivery in the "My Orders" section.
+      {% endif %}
+    </p>
+
+    <div style="background:white;border-radius:var(--radius-xl);padding:32px;border:1px solid var(--border);box-shadow:var(--shadow-lg);margin:28px 0;text-align:left">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-size:13px;color:var(--text-muted);font-weight:700">ORDER NUMBER</div>
+          <div style="font-family:var(--font-display);font-size:22px;color:var(--primary)">#TR-{{ requests.0.id }}</div>
+        </div>
+        <div style="background:rgba(255,107,53,0.15);color:var(--primary);padding:6px 18px;border-radius:50px;font-weight:800;font-size:13px">
+          {% if requests.0.status == 'PENDING' %}⏳ PENDING APPROVAL
+          {% elif requests.0.status == 'ACCEPTED' %}✅ ACCEPTED
+          {% elif requests.0.status == 'PAID' %}💰 PAID & CONFIRMED
+          {% else %}❌ {{ requests.0.status }}{% endif %}
+        </div>
+      </div>
+
+        <!-- Items -->
+        <div style="border-top:1px solid var(--border-light);padding-top:20px">
+          {% for req in requests %}
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            {% if req.toy.image %}
+            <img src="{{ req.toy.image.url }}" style="width:56px;height:56px;border-radius:10px;object-fit:cover" alt="{{ req.toy.name }}">
+            {% else %}
+            <div style="width:56px;height:56px;border-radius:10px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">🧸</div>
+            {% endif %}
+            <div>
+              <div style="font-weight:800;font-size:14px;color:var(--dark)">{{ req.toy.name }}</div>
+              <div style="font-size:12px;color:var(--text-muted);font-weight:600">{{ req.quantity }} Unit{{ req.quantity|pluralize }}</div>
+              <div style="font-size:11px;color:var(--primary);font-weight:700;margin-top:2px">
+                <i class="mdi mdi-storefront-outline"></i> Rental: {{ req.rental_provider.username }}
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p style="text-align:center;color:var(--text-muted);font-size:14px">No recent requests found.</p>
+          {% endfor %}
+        </div>
+
+      <div style="border-top:1px solid var(--border-light);padding-top:16px;margin-top:4px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span style="color:var(--text-muted);font-weight:600">Total Price</span><span style="font-family:var(--font-display);font-size:20px;color:var(--primary)">₹{{ total_payable }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:var(--text-muted);font-weight:600">Status</span><span style="font-weight:800;color:var(--primary)">{{ requests.0.status|title }}</span></div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div style="background:white;border-radius:var(--radius-lg);padding:24px;border:1px solid var(--border);margin-bottom:28px;text-align:left">
+      <div style="font-weight:800;font-size:15px;color:var(--dark);margin-bottom:16px">📍 What happens next?</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        
+        <!-- Step 1: Request Sent -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0">✓</div>
+          <div>
+            <div style="font-weight:800;font-size:14px;color:var(--dark)">Request Sent</div>
+            <div style="font-size:12px;color:var(--text-muted)">Your request has been recorded.</div>
+          </div>
+        </div>
+
+        <!-- Step 2: Provider Approval -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:{% if requests.0.status != 'PENDING' %}var(--secondary){% else %}var(--primary){% endif %};border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0">
+            {% if requests.0.status != 'PENDING' %}✓{% else %}⏳{% endif %}
+          </div>
+          <div>
+            <div style="font-weight:800;font-size:14px;color:{% if requests.0.status == 'PENDING' %}var(--dark){% else %}var(--text-muted){% endif %}">Rental Provider Approval</div>
+            <div style="font-size:12px;color:var(--text-muted)">
+              {% if requests.0.status == 'PENDING' %}Waiting for provider to review and accept.{% else %}Provider has accepted your request.{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Payment -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:{% if requests.0.status == 'PAID' or requests.0.status == 'COMPLETED' %}var(--secondary){% elif requests.0.status == 'ACCEPTED' %}var(--primary){% else %}var(--border){% endif %};border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0">
+            {% if requests.0.status == 'PAID' or requests.0.status == 'COMPLETED' %}✓{% else %}💳{% endif %}
+          </div>
+          <div>
+            <div style="font-weight:800;font-size:14px;color:{% if requests.0.status == 'ACCEPTED' %}var(--dark){% else %}var(--text-muted){% endif %}">Secure Payment</div>
+            <div style="font-size:12px;color:var(--text-muted)">
+              {% if requests.0.status == 'ACCEPTED' %}Please complete the payment to confirm.{% elif requests.0.status == 'PENDING' %}Unlocked after provider approval.{% else %}Payment successful.{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Delivery -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:{% if requests.0.status == 'PAID' %}var(--primary){% elif requests.0.status == 'COMPLETED' %}var(--secondary){% else %}var(--border){% endif %};border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0">
+            {% if requests.0.status == 'COMPLETED' %}✓{% else %}📦{% endif %}
+          </div>
+          <div>
+            <div style="font-weight:800;font-size:14px;color:{% if requests.0.status == 'PAID' %}var(--dark){% else %}var(--text-muted){% endif %}">Toy Delivery</div>
+            <div style="font-size:12px;color:var(--text-muted)">
+              {% if requests.0.status == 'PAID' %}Your toys are being prepared for delivery.{% elif requests.0.status == 'COMPLETED' %}Delivered and enjoying!{% else %}Scheduled after payment.{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:12px">
+        <a href="{% url 'my_orders_view' %}" class="btn btn-primary" style="flex:1;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:700">Track Requests</a>
+        <a href="{% url 'shop_view' %}" class="btn" style="flex:1;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:700;background:#f0f0f0;color:var(--dark)">Continue Shopping</a>
+      </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--text-muted);font-weight:600">Confirmation sent to <strong>{{ request.user.email }}</strong> · Need help? <a href="/contact_view/" style="color:var(--primary)">Contact us</a></p>
+  </div>
+</section>
+
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+<script src="{% static 'sta_user/js/main.js' %}"></script>
+<script>
+// Confetti
+const colors = ['#FF6B35','#4ECDC4','#FFE66D','#C77DFF','#A8E6CF'];
+for (let i = 0; i < 50; i++) {
+  const c = document.createElement('div');
+  c.className = 'confetti-piece';
+  c.style.cssText = `left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;transform:rotate(${Math.random()*360}deg)`;
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
+</script>
+</body>
+</html>

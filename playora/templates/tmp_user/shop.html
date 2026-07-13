@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop – PlayOra</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+    <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}" />
+    <style>
+      .sort-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .sort-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .results-count {
+        font-weight: 700;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+      .view-toggle {
+        display: flex;
+        gap: 4px;
+      }
+      .view-btn {
+        width: 34px;
+        height: 34px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: var(--transition);
+      }
+      .view-btn.active,
+      .view-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: white;
+      }
+      .range-slider {
+        width: 100%;
+        accent-color: var(--primary);
+      }
+      .filter-section-divider {
+        border: none;
+        border-top: 1px solid var(--border-light);
+        margin: 20px 0;
+      }
+      .age-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+    </style>
+  </head>
+  <body data-page="shop">
+    <div id="header-inject"></div>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-section">
+      <div class="container">
+        <h1 class="breadcrumb-title">{% if current_cat %}{{ current_cat.name }}{% else %}Shop All Toys{% endif %}</h1>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Home</a>
+          </li>
+          <li class="breadcrumb-sep">›</li>
+          {% if current_cat %}
+          <li class="breadcrumb-item"><a href="/shop_view/">Shop</a></li>
+          <li class="breadcrumb-sep">›</li>
+          <li class="breadcrumb-item active">{{ current_cat.name }}</li>
+          {% else %}
+          <li class="breadcrumb-item active">Shop</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="shop-layout">
+          <!-- SIDEBAR -->
+          <aside class="filter-sidebar">
+            <div class="filter-title">
+              Filters
+              <button
+                onclick="
+                  document
+                    .querySelectorAll('.filter-check input')
+                    .forEach((c) => (c.checked = false))
+                "
+                class="btn btn-sm btn-outline"
+                style="padding: 4px 12px; font-size: 12px"
+              >
+                Clear All
+              </button>
+            </div>
+
+            <div class="filter-section">
+              <div class="filter-section-title">📦 Category</div>
+              {% for c in cat %}
+              <a href="/shop_view/?cat={{ c.id }}" class="filter-check" style="text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <input type="checkbox" {% if current_cat.id == c.id %}checked{% endif %} style="pointer-events: none;" />
+                <span class="filter-check-label" style="color: {% if current_cat.id == c.id %}var(--primary){% else %}var(--text-light){% endif %}; font-weight: {% if current_cat.id == c.id %}700{% else %}600{% endif %};">{{ c.name }}</span>
+              </a>
+              {% endfor %}
+            </div>
+
+            <hr class="filter-section-divider" />
+
+            <div class="filter-section">
+              <div class="filter-section-title">🎂 Age Group</div>
+              <div class="age-tags">
+                <a href="/shop_view/{% if current_cat %}?cat={{ current_cat.id }}{% endif %}{% if selected_brand %}{% if current_cat %}&{% else %}?{% endif %}brand={{ selected_brand }}{% endif %}" class="tag tag-outline {% if not selected_age %}active{% endif %}" style="text-decoration: none;">All Ages</a>
+                {% for a in age_groups %}
+                <a href="/shop_view/?age={{ a }}{% if current_cat %}&cat={{ current_cat.id }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}" class="tag tag-outline {% if selected_age == a %}active{% endif %}" style="text-decoration: none;">{{ a }}</a>
+                {% endfor %}
+              </div>
+            </div>
+
+            <hr class="filter-section-divider" />
+
+            <div class="filter-section">
+              <div class="filter-section-title">💰 Rental Price (per week)</div>
+              <div style="margin-bottom: 12px">
+                <input
+                  type="range"
+                  class="range-slider"
+                  min="0"
+                  max="500"
+                  value="300"
+                  id="priceRange"
+                  oninput="
+                    document.getElementById('priceVal').textContent =
+                      '₹' + this.value
+                  "
+                />
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: var(--text-muted);
+                "
+              >
+                <span>₹0</span><span id="priceVal">₹300</span>
+              </div>
+            </div>
+
+            <hr class="filter-section-divider" />
+
+            <div class="filter-section">
+              <div class="filter-section-title">🏷️ Brand</div>
+              {% for b in brands %}
+              <a href="/shop_view/?brand={{ b }}{% if current_cat %}&cat={{ current_cat.id }}{% endif %}{% if selected_age %}&age={{ selected_age }}{% endif %}" class="filter-check" style="text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <input type="checkbox" {% if selected_brand == b %}checked{% endif %} style="pointer-events: none;" />
+                <span class="filter-check-label" style="color: {% if selected_brand == b %}var(--primary){% else %}var(--text-light){% endif %}; font-weight: {% if selected_brand == b %}700{% else %}600{% endif %};">{{ b }}</span>
+              </a>
+              {% endfor %}
+            </div>
+
+            <hr class="filter-section-divider" />
+
+            <div class="filter-section">
+              <div class="filter-section-title">⭐ Rating</div>
+              <label class="filter-check"
+                ><input type="checkbox" /><span class="filter-check-label"
+                  >★★★★★ (5 stars)</span
+                ></label
+              >
+              <label class="filter-check"
+                ><input type="checkbox" checked /><span
+                  class="filter-check-label"
+                  >★★★★☆ (4+ stars)</span
+                ></label
+              >
+              <label class="filter-check"
+                ><input type="checkbox" /><span class="filter-check-label"
+                  >★★★☆☆ (3+ stars)</span
+                ></label
+              >
+            </div>
+
+            <button
+              class="btn btn-primary"
+              style="width: 100%; margin-top: 8px"
+            >
+              Apply Filters
+            </button>
+          </aside>
+
+          <!-- MAIN CONTENT -->
+          <div>
+            <!-- Sort Bar -->
+            <div class="sort-bar">
+              <div class="sort-bar-left">
+                <span class="results-count"
+                  >Showing <strong>{{ toy.count }}</strong> toys</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <div class="view-toggle">
+                  <button class="view-btn active" data-tooltip="Grid">⊞</button>
+                  <button class="view-btn" data-tooltip="List">☰</button>
+                </div>
+                <select
+                  class="form-control form-select"
+                  style="
+                    width: auto;
+                    padding: 8px 36px 8px 12px;
+                    font-size: 13px;
+                    font-weight: 700;
+                  "
+                >
+                  <option>Sort: Popular</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Newest First</option>
+                  <option>Top Rated</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Active Filters -->
+            {% if current_cat or selected_brand or selected_age %}
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 20px;
+              "
+            >
+              {% if current_cat %}
+              <a href="/shop_view/?{% if selected_brand %}brand={{ selected_brand }}{% endif %}{% if selected_age %}&age={{ selected_age }}{% endif %}"
+                class="tag"
+                style="
+                  background: rgba(255, 107, 53, 0.1);
+                  color: var(--primary);
+                  border: 1px solid rgba(255, 107, 53, 0.2);
+                  text-decoration: none;
+                "
+                >{{ current_cat.name }} ✕</a>
+              {% endif %}
+              
+              {% if selected_brand %}
+              <a href="/shop_view/?{% if current_cat %}cat={{ current_cat.id }}{% endif %}{% if selected_age %}&age={{ selected_age }}{% endif %}"
+                class="tag"
+                style="
+                  background: rgba(255, 107, 53, 0.1);
+                  color: var(--primary);
+                  border: 1px solid rgba(255, 107, 53, 0.2);
+                  text-decoration: none;
+                "
+                >{{ selected_brand }} ✕</a>
+              {% endif %}
+
+              {% if selected_age %}
+              <a href="/shop_view/?{% if current_cat %}cat={{ current_cat.id }}{% endif %}{% if selected_brand %}brand={{ selected_brand }}{% endif %}"
+                class="tag"
+                style="
+                  background: rgba(255, 107, 53, 0.1);
+                  color: var(--primary);
+                  border: 1px solid rgba(255, 107, 53, 0.2);
+                  text-decoration: none;
+                "
+                >{{ selected_age }} ✕</a>
+              {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Toys Grid -->
+            <div class="toys-grid fade-in">
+              {% for i in toy %}
+              <div class="toy-card">
+                <a href="{% url 'toydetail_view' i.id %}">
+                  <div class="toy-card-img">
+                    {% if i.image %}
+                    <img
+                      src="{{ i.image.url }}"
+                      alt="{{ i.name }}"
+                    />
+                    {% else %}
+                    <div style="height:100%; width:100%; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">
+                      <span style="font-size:40px">🧸</span>
+                    </div>
+                    {% endif %}
+                    <span class="toy-card-badge new">NEW</span>
+                    <div class="toy-card-actions">
+                      <button
+                        class="toy-card-action wishlist-btn"
+                        data-id="{{ i.id }}"
+                        data-name="{{ i.name }}"
+                        data-price="{{ i.rental_price_per_week }}"
+                        data-img="{{ i.image.url }}"
+                      >
+                        ❤️
+                      </button>
+                      <span class="toy-card-action">👁️</span>
+                    </div>
+                  </div>
+                </a>
+                <div class="toy-card-body">
+                  <div class="toy-cat">{{ i.category.name }}</div>
+                  <h3 class="toy-name">{{ i.name }}</h3>
+                  <div class="toy-rating">
+                    <span class="stars">★★★★★</span
+                    ><span class="rating-count">(0)</span>
+                  </div>
+                  <div class="toy-meta">
+                    <div class="toy-price">
+                      <span class="current">₹{{ i.rental_price_per_week }}</span
+                      ><span class="period">/wk</span>
+                    </div>
+                    <button
+                      class="add-cart-btn add-to-cart-btn"
+                      data-id="{{ i.id }}"
+                      data-name="{{ i.name }}"
+                      data-price="{{ i.rental_price_per_week }}"
+                      data-img="{{ i.image.url }}"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <div class="text-center" style="grid-column: 1 / -1; padding: 40px;">
+                <p>No toys found matching your criteria.</p>
+              </div>
+              {% endfor %}
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination" style="margin-top: 48px">
+              <a class="page-btn">‹</a>
+              <a class="page-btn active">1</a>
+              <a class="page-btn">2</a>
+              <a class="page-btn">3</a>
+              <span style="padding: 0 4px; color: var(--text-muted)">...</span>
+              <a class="page-btn">12</a>
+              <a class="page-btn">›</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="footer-inject"></div>
+    <script>
+      window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+      window.USER_NAME = "{{ request.user.username }}";
+      window.CART_COUNT = "{{ cart_count|default:0 }}";
+    </script>
+    <script src="{% static 'sta_user/js/components.js' %}"></script>
+    <script src="{% static 'sta_user/js/main.js' %}"></script>
+  </body>
+</html>

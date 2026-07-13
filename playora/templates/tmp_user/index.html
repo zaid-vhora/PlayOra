@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayOra – Rent Amazing Toys for Your Kids</title>
+  <meta name="description"
+    content="India's best toy rental platform. Rent premium toys, board games, LEGO sets & more for your kids. Free delivery. Sanitized & safe.">
+  <link rel="icon" type="image/x-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+  <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+  <style>
+    /* HOME SPECIFIC */
+    .hero {
+      padding-top: calc(72px + 40px);
+    }
+
+    .brands-strip {
+      background: white;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .brands-track {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    .brands-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .brand-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .brand-item span {
+      font-size: 20px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+
+    .how-grid::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--primary) 0, var(--primary) 8px, transparent 8px, transparent 16px);
+      opacity: 0.3;
+    }
+
+    .how-card {
+      text-align: center;
+      padding: 32px 20px;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .how-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .how-num {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--off-white);
+    }
+
+    .how-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .how-title {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .how-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* Promo cards */
+    .promo-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .promo-card {
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .promo-card:hover {
+      transform: scale(1.02);
+    }
+
+    .promo-card-1 {
+      background: linear-gradient(135deg, #FF6B35, #FF8C5A);
+    }
+
+    .promo-card-2 {
+      background: linear-gradient(135deg, #4ECDC4, #6EE7E0);
+    }
+
+    .promo-card-3 {
+      background: linear-gradient(135deg, #C77DFF, #D8A8FF);
+    }
+
+    .promo-emoji {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 80px;
+      opacity: 0.25;
+      line-height: 1;
+    }
+
+    .promo-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .promo-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .promo-sub {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+
+    /* App section */
+    .app-section {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+      border-radius: var(--radius-xl);
+      padding: 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .app-section::before {
+      content: '📱';
+      position: absolute;
+      font-size: 400px;
+      opacity: 0.02;
+      right: -80px;
+      top: -80px;
+    }
+
+    .app-title {
+      font-family: var(--font-display);
+      font-size: 38px;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .app-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .app-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .app-store-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .app-store-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .app-store-icon {
+      font-size: 28px;
+    }
+
+    .app-store-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 600;
+    }
+
+    .app-store-name {
+      font-size: 15px;
+      color: white;
+      font-weight: 800;
+    }
+
+    .app-phones {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: -20px;
+      position: relative;
+    }
+
+    .app-phone-mock {
+      width: 180px;
+      height: 360px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+      border-radius: 28px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-size: 40px;
+      position: relative;
+    }
+
+    .app-phone-mock::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    .app-phone-mock.main {
+      width: 200px;
+      height: 400px;
+      z-index: 2;
+      background: linear-gradient(145deg, rgba(255, 107, 53, 0.3), rgba(255, 107, 53, 0.1));
+      border-color: rgba(255, 107, 53, 0.4);
+    }
+
+    /* Stats section */
+    .stats-section {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius-xl);
+      padding: 50px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 42px;
+      color: white;
+      display: block;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 700;
+    }
+
+
+    @media (max-width: 991px) {
+      .how-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .how-grid::before {
+        display: none;
+      }
+
+      .promo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app-section {
+        grid-template-columns: 1fr;
+        padding: 40px;
+      }
+
+      .app-phones {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .how-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Tabs */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+
+<body data-page="home">
+
+  <div id="header-inject"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge fade-in">
+            <div class="hero-badge-dot">✨</div>
+            Trusted by 50,000+ Happy Families
+          </div>
+          <h1 class="hero-title fade-in stagger-1">
+            Rent <span class="highlight">Amazing Toys</span> for Your Little Stars
+          </h1>
+          <p class="hero-desc fade-in stagger-2">
+            Access 5,000+ premium toys, games & educational kits. Rent for a week, month, or longer. Sanitized, safe &
+            delivered to your door. Save up to 90% vs buying!
+          </p>
+          <div class="hero-actions fade-in stagger-3">
+            <a href="/shop_view/" class="btn btn-primary btn-lg">🛍️ Browse Toys</a>
+            <a href="/services_view/" class="btn btn-outline btn-lg">How It Works</a>
+          </div>
+          <div class="hero-search fade-in stagger-4" style="margin-bottom:32px">
+            <input class="hero-search-input" type="text" placeholder="Search LEGO, board games, dolls...">
+            <button class="hero-search-btn">Search 🔍</button>
+          </div>
+          <div class="hero-stats fade-in stagger-4">
+            <div class="hero-stat-item">
+              <span class="hero-stat-num" data-count="5000" data-suffix="+">5000+</span>
+              <span class="hero-stat-label">Toys Available</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-num" data-count="50000" data-suffix="+">50000+</span>
+              <span class="hero-stat-label">Happy Families</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-num" data-count="25" data-suffix="+">25+</span>
+              <span class="hero-stat-label">Cities Served</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual fade-in stagger-2">
+          <div class="hero-image-wrap">
+            <img class="hero-img" src="{% static 'sta_user/images/for_user_dash_bord.avif' %}"
+              alt="Kids playing with toys" loading="eager">
+            <div class="hero-float-card card-1">
+              <div class="float-icon" style="background:rgba(78,205,196,0.15)">🚀</div>
+              <div>
+                <div style="font-weight:800;font-size:14px;color:var(--dark)">Free Delivery</div>
+                <div style="font-size:12px;color:var(--text-muted)">On first order</div>
+              </div>
+            </div>
+            <div class="hero-float-card card-2">
+              <div class="float-icon" style="background:rgba(255,230,109,0.2)">⭐</div>
+              <div>
+                <div style="font-weight:800;font-size:14px;color:var(--dark)">4.9/5 Rating</div>
+                <div style="font-size:12px;color:var(--text-muted)">2,400+ reviews</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS MARQUEE -->
+  <div class="brands-strip">
+    <div class="brands-track">
+      <div class="brand-item"><span>🧱</span> LEGO</div>
+      <div class="brand-item"><span>🎮</span> Hasbro</div>
+      <div class="brand-item"><span>🐻</span> Fisher-Price</div>
+      <div class="brand-item"><span>🚗</span> Hot Wheels</div>
+      <div class="brand-item"><span>🎪</span> Mattel</div>
+      <div class="brand-item"><span>🤖</span> Funskool</div>
+      <div class="brand-item"><span>🎨</span> Crayola</div>
+      <div class="brand-item"><span>🌟</span> Skillofun</div>
+      <div class="brand-item"><span>🧩</span> Ravensburger</div>
+      <div class="brand-item"><span>🎯</span> Osmo</div>
+      <!-- Repeat -->
+      <div class="brand-item"><span>🧱</span> LEGO</div>
+      <div class="brand-item"><span>🎮</span> Hasbro</div>
+      <div class="brand-item"><span>🐻</span> Fisher-Price</div>
+      <div class="brand-item"><span>🚗</span> Hot Wheels</div>
+      <div class="brand-item"><span>🎪</span> Mattel</div>
+      <div class="brand-item"><span>🤖</span> Funskool</div>
+      <div class="brand-item"><span>🎨</span> Crayola</div>
+      <div class="brand-item"><span>🌟</span> Skillofun</div>
+      <div class="brand-item"><span>🧩</span> Ravensburger</div>
+      <div class="brand-item"><span>🎯</span> Osmo</div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section" style="background:white">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:48px">
+        <div class="section-badge">🗂️ Browse Categories</div>
+        <h2 class="section-title">Toys for <span>Every Child</span></h2>
+        <p class="section-subtitle" style="margin:0 auto">From babies to teens — we have toys for every age, interest &
+          developmental stage.</p>
+      </div>
+      <div class="cat-grid fade-in">
+        {% for i in cat %}
+        <a href="/toy_view/?cat={{ i.id }}" class="cat-card">
+          <div class="cat-count">
+            {% if i.image %}
+            <img src="{{i.image.url}}" height="200px" width="200px" style="object-fit: cover; border-radius: 10px;">
+            {% else %}
+            <div
+              style="height:200px; width:200px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border-radius: 10px;">
+              <span style="font-size:40px">🧸</span>
+            </div>
+            {% endif %}
+          </div>
+          <div class="cat-name" style="color: #ff6b35;">{{i.name}}</div>
+          {% comment %} <div class="cat-name">{{i.description}}</div> {% endcomment %}
+          {% comment %} <div class="cat-name">{{i.is_active}}</div> {% endcomment %}
+          {% comment %} <div class="cat-name">{{i.created_at}}</div>
+          <div class="cat-name">{{i.updated_at}}</div> {% endcomment %}
+        </a>
+        {% endfor %}
+      </div>
+      <div style="text-align:center;margin-top:36px">
+        <a href="/categories/" class="btn btn-outline">View All Categories 🗂️</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:56px">
+        <div class="section-badge">⚡ Simple & Easy</div>
+        <h2 class="section-title">How <span>PlayOra</span> Works</h2>
+        <p class="section-subtitle" style="margin:0 auto">Renting toys has never been this easy. 4 simple steps and joy
+          arrives at your door!</p>
+      </div>
+      <div class="how-grid fade-in">
+        <div class="how-card">
+          <div class="how-num">1</div>
+          <div class="how-icon" style="background:rgba(255,107,53,0.1)">🔍</div>
+          <h3 class="how-title">Browse & Choose</h3>
+          <p class="how-desc">Explore 5,000+ toys. Filter by age, category, brand or rental duration to find the perfect
+            toys.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">2</div>
+          <div class="how-icon" style="background:rgba(78,205,196,0.1)">🛒</div>
+          <h3 class="how-title">Add to Cart</h3>
+          <p class="how-desc">Select rental period (weekly/monthly), add to cart and checkout securely in minutes.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">3</div>
+          <div class="how-icon" style="background:rgba(255,230,109,0.2)">🚀</div>
+          <h3 class="how-title">We Deliver</h3>
+          <p class="how-desc">We sanitize, pack & deliver your toys within 24-48 hours. Free delivery on your first
+            order!</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">4</div>
+          <div class="how-icon" style="background:rgba(168,230,207,0.3)">🔄</div>
+          <h3 class="how-title">Play & Return</h3>
+          <p class="how-desc">Enjoy the toys, then simply return them when done. Want to keep? We offer easy buy
+            options.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED TOYS -->
+  <section class="section" style="background:white">
+    <div class="container">
+      <div
+        style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px">
+        <div>
+          <div class="section-badge">🔥 Hot Right Now</div>
+          <h2 class="section-title" style="margin-bottom:0">Featured <span>Toys</span></h2>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="tag tag-outline active tab-btn" data-tab="featured" data-tab-group="toys">All</button>
+          <button class="tag tag-outline tab-btn" data-tab="new" data-tab-group="toys">New Arrivals</button>
+          <button class="tag tag-outline tab-btn" data-tab="popular" data-tab-group="toys">Popular</button>
+          <button class="tag tag-outline tab-btn" data-tab="sale" data-tab-group="toys">On Sale</button>
+        </div>
+      </div>
+
+      <div id="featured" class="tab-content active" data-tab-group="toys">
+        <div class="toys-grid-4 fade-in">
+          {% for i in toy %}
+          <div class="toy-card">
+            <a href="{% url 'toydetail_view' i.id %}" style="text-decoration: none; color: inherit;">
+              <div class="toy-img">
+                {% if i.image %}
+                <img src="{{i.image.url}}" height="200px" width="200px" style="object-fit: cover; border-radius: 10px;">
+                {% else %}
+                <div style="height:200px; width:200px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border-radius: 10px;">
+                  <span style="font-size:40px">🧸</span>
+                </div>
+                {% endif %}
+              </div>
+              <div class="toy-card-body">
+                <div class="toy-cat">{{ i.category.name }}</div>
+                <h3 class="toy-name">{{ i.name }}</h3>
+                <div class="toy-meta">
+                  <div class="toy-price"><span class="current">₹{{ i.rental_price_per_week }}</span><span class="period">/week</span></div>
+                  <button class="add-cart-btn add-to-cart-btn" data-id="{{ i.id }}" data-name="{{ i.name }}" data-price="{{ i.rental_price_per_week}}" data-img="{% if i.image %}{{ i.image.url }}{% endif %}" aria-label="Add to cart">+</button>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="new" class="tab-content" data-tab-group="toys">
+        <div class="toys-grid-4 fade-in">
+          {% for i in new_arrivals %}
+          <div class="toy-card">
+            <a href="{% url 'toydetail_view' i.id %}" style="text-decoration: none; color: inherit;">
+              <div class="toy-img">
+                {% if i.image %}
+                <img src="{{i.image.url}}" height="200px" width="200px" style="object-fit: cover; border-radius: 10px;">
+                {% else %}
+                <div style="height:200px; width:200px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border-radius: 10px;">
+                  <span style="font-size:40px">🧸</span>
+                </div>
+                {% endif %}
+                <span class="toy-card-badge new" style="position: absolute; top: 10px; left: 10px; background: #FF6B35; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800;">NEW</span>
+              </div>
+              <div class="toy-card-body">
+                <div class="toy-cat">{{ i.category.name }}</div>
+                <h3 class="toy-name">{{ i.name }}</h3>
+                <div class="toy-meta">
+                  <div class="toy-price"><span class="current">₹{{ i.rental_price_per_week }}</span><span class="period">/week</span></div>
+                  <button class="add-cart-btn add-to-cart-btn" data-id="{{ i.id }}" data-name="{{ i.name }}" data-price="{{ i.rental_price_per_week}}" data-img="{% if i.image %}{{ i.image.url }}{% endif %}" aria-label="Add to cart">+</button>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="popular" class="tab-content" data-tab-group="toys">
+        <div class="toys-grid-4 fade-in">
+          {% for i in popular_toys %}
+          <div class="toy-card">
+            <a href="{% url 'toydetail_view' i.id %}" style="text-decoration: none; color: inherit;">
+              <div class="toy-img">
+                {% if i.image %}
+                <img src="{{i.image.url}}" height="200px" width="200px" style="object-fit: cover; border-radius: 10px;">
+                {% else %}
+                <div style="height:200px; width:200px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border-radius: 10px;">
+                  <span style="font-size:40px">🧸</span>
+                </div>
+                {% endif %}
+              </div>
+              <div class="toy-card-body">
+                <div class="toy-cat">{{ i.category.name }}</div>
+                <h3 class="toy-name">{{ i.name }}</h3>
+                <div class="toy-meta">
+                  <div class="toy-price"><span class="current">₹{{ i.rental_price_per_week }}</span><span class="period">/week</span></div>
+                  <button class="add-cart-btn add-to-cart-btn" data-id="{{ i.id }}" data-name="{{ i.name }}" data-price="{{ i.rental_price_per_week}}" data-img="{% if i.image %}{{ i.image.url }}{% endif %}" aria-label="Add to cart">+</button>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="sale" class="tab-content" data-tab-group="toys">
+        <div class="toys-grid-4 fade-in">
+          {% for i in on_sale_toys %}
+          <div class="toy-card">
+            <a href="{% url 'toydetail_view' i.id %}" style="text-decoration: none; color: inherit;">
+              <div class="toy-img">
+                {% if i.image %}
+                <img src="{{i.image.url}}" height="200px" width="200px" style="object-fit: cover; border-radius: 10px;">
+                {% else %}
+                <div style="height:200px; width:200px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border-radius: 10px;">
+                  <span style="font-size:40px">🧸</span>
+                </div>
+                {% endif %}
+              </div>
+              <div class="toy-card-body">
+                <div class="toy-cat">{{ i.category.name }}</div>
+                <h3 class="toy-name">{{ i.name }}</h3>
+                <div class="toy-meta">
+                  <div class="toy-price"><span class="current">₹{{ i.rental_price_per_week }}</span><span class="period">/week</span></div>
+                  <button class="add-cart-btn add-to-cart-btn" data-id="{{ i.id }}" data-name="{{ i.name }}" data-price="{{ i.rental_price_per_week}}" data-img="{% if i.image %}{{ i.image.url }}{% endif %}" aria-label="Add to cart">+</button>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+
+      <div style="text-align:center;margin-top:36px">
+        <a href="/toy_view/" class="btn btn-primary">View All Toys 🎮</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMO BANNERS -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="promo-grid fade-in">
+        <div class="promo-card promo-card-1">
+          <div class="promo-emoji">🎪</div>
+          <div>
+            <span class="promo-tag">🎉 SPECIAL OFFER</span>
+            <h3 class="promo-title">First Rental FREE!</h3>
+            <p class="promo-sub">Use code PLAY20 and get your first week's rental absolutely free.</p>
+            <a href="/shop_view/" class="btn btn-white btn-sm">Grab the Deal →</a>
+          </div>
+        </div>
+        <div class="promo-card promo-card-2">
+          <div class="promo-emoji">🏆</div>
+          <div>
+            <span class="promo-tag">⭐ PREMIUM</span>
+            <h3 class="promo-title">Subscribe & Save</h3>
+            <p class="promo-sub">Monthly plans from ₹499/mo</p>
+            <a href="/services_view/" class="btn btn-white btn-sm">Learn More →</a>
+          </div>
+        </div>
+        <div class="promo-card promo-card-3">
+          <div class="promo-emoji">🎓</div>
+          <div>
+            <span class="promo-tag">📚 EDUCATIONAL</span>
+            <h3 class="promo-title">STEM Kits</h3>
+            <p class="promo-sub">Science & coding toys</p>
+            <a href="/toy_view/?cat=stem" class="btn btn-white btn-sm">Explore →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="section" style="background:white">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:48px">
+        <div class="section-badge">💎 Why PlayOra?</div>
+        <h2 class="section-title">We're <span>Different</span> in the Best Way</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" class="fade-in">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(255,107,53,0.1)">🧼</div>
+          <h3 class="feature-title">Sanitized & Safe</h3>
+          <p class="feature-desc">Every toy is thoroughly cleaned, sanitized and safety-inspected before delivery. Your
+            child's health is our priority.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(78,205,196,0.1)">💸</div>
+          <h3 class="feature-title">Save Up to 90%</h3>
+          <p class="feature-desc">Renting costs a fraction of buying. A ₹4,000 LEGO set costs just ₹149/week to rent.
+            Incredible savings!</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(255,230,109,0.2)">🔄</div>
+          <h3 class="feature-title">Flexible Plans</h3>
+          <p class="feature-desc">Rent by the week or month. Extend, swap or return anytime. No commitments, no clutter,
+            no worries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(199,125,255,0.15)">🚀</div>
+          <h3 class="feature-title">Fast Delivery</h3>
+          <p class="feature-desc">Order by 12 PM for same-day delivery in Mumbai, Pune & Bangalore. Next-day delivery in
+            25+ cities.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(168,230,207,0.3)">🌱</div>
+          <h3 class="feature-title">Eco-Friendly</h3>
+          <p class="feature-desc">Sharing toys reduces plastic waste. We use eco-friendly packaging. Be sustainable
+            while your kids play!</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(255,107,53,0.08)">💬</div>
+          <h3 class="feature-title">24/7 Support</h3>
+          <p class="feature-desc">Our dedicated parent-support team is available round the clock via chat, call or
+            WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="stats-section fade-in">
+        <div class="stats-grid">
+          <div>
+            <div class="stat-icon">🧸</div>
+            <span class="stat-num" data-count="5000" data-suffix="+">5000+</span>
+            <span class="stat-label">Toys in Library</span>
+          </div>
+          <div>
+            <div class="stat-icon">👨‍👩‍👧‍👦</div>
+            <span class="stat-num" data-count="50000" data-suffix="+">50K+</span>
+            <span class="stat-label">Happy Families</span>
+          </div>
+          <div>
+            <div class="stat-icon">🏙️</div>
+            <span class="stat-num" data-count="25" data-suffix="+">25+</span>
+            <span class="stat-label">Cities Covered</span>
+          </div>
+          <div>
+            <div class="stat-icon">⭐</div>
+            <span class="stat-num" data-count="4" data-suffix=".9/5">4.9/5</span>
+            <span class="stat-label">Average Rating</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:48px">
+        <div class="section-badge">💬 Parent Stories</div>
+        <h2 class="section-title">Families <span>Love </span> Play<span>Ora</span></h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" class="fade-in">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">My son is obsessed with new toys every week but buying them was draining our
+            budget. Playora is a lifesaver! He gets variety and we save thousands every month.</p>
+          <div style="margin-top:16px">
+            <div class="testimonial-header">
+              <img class="testimonial-avatar"
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Priya">
+              <div>
+                <div class="testimonial-name">Heli Patel</div>
+                <div class="testimonial-role">Mom · Talod</div>
+              </div>
+            </div>
+            <div class="stars" style="font-size:16px">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">The delivery is super fast and every toy arrives perfectly clean and packaged. My
+            daughter was blown away by the LEGO Castle set. Highly recommend!</p>
+          <div style="margin-top:16px">
+            <div class="testimonial-header">
+              <img class="testimonial-avatar" src="{% static 'sta_user/images/aashish_patel.jpeg' %}" alt="Aashish">
+              <div>
+                <div class="testimonial-name">Aashish Patel</div>
+                <div class="testimonial-role">Dad · Tajpur</div>
+              </div>
+            </div>
+            <div class="stars" style="font-size:16px">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">As a working dad, I love how easy Playora makes it. The web is intuitive, toys are
+            age-appropriate, and the return process is seamless. Worth every penny!</p>
+          <div style="margin-top:16px">
+            <div class="testimonial-header">
+              <img class="testimonial-avatar" src="{% static 'sta_user/images/saffan.jpeg' %}" alt="saffan">
+              <div>
+                <div class="testimonial-name">Saffan</div>
+                <div class="testimonial-role">Dad · Himmatnagar</div>
+              </div>
+            </div>
+            <div class="stars" style="font-size:16px">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APP SECTION -->
+  {% comment %} <section class="section-sm">
+    <div class="container">
+      <div class="app-section fade-in">
+        <div>
+          <div class="section-badge" style="background:rgba(255,230,109,0.2);color:var(--accent)">📱 Mobile App</div>
+          <h2 class="app-title">Get the ToyRent App</h2>
+          <p class="app-desc">Browse, rent & track your toy orders from your phone. Exclusive app-only deals and early
+            access to new arrivals!</p>
+          <div class="app-btns">
+            <a href="/" class="app-store-btn">
+              <div class="app-store-icon">🍎</div>
+              <div>
+                <div class="app-store-label">DOWNLOAD ON THE</div>
+                <div class="app-store-name">App Store</div>
+              </div>
+            </a>
+            <a href="/" class="app-store-btn">
+              <div class="app-store-icon">🤖</div>
+              <div>
+                <div class="app-store-label">GET IT ON</div>
+                <div class="app-store-name">Google Play</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="app-phones">
+          <div class="app-phone-mock" style="transform:rotate(-5deg) translateY(20px)">🧸<br>📦<br>🚀</div>
+          <div class="app-phone-mock main">📱<br>🎮<br>⭐</div>
+          <div class="app-phone-mock" style="transform:rotate(5deg) translateY(20px)">🎲<br>❤️<br>🛒</div>
+        </div>
+      </div>
+    </div>
+  </section> {% endcomment %}
+
+  <!-- BLOG PREVIEW -->
+  {% comment %} <section class="section" style="background:white">
+    <div class="container">
+      <div
+        style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px">
+        <div>
+          <div class="section-badge">📰 From Our Blog</div>
+          <h2 class="section-title" style="margin-bottom:0">Parenting <span>Tips & Guides</span></h2>
+        </div>
+        <a href="/blog_view/" class="btn btn-outline">All Articles →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" class="fade-in">
+        <div class="blog-card">
+          <div class="blog-img"><img src="https://images.unsplash.com/photo-1555009393-f20bdb245c4d?w=400&q=80"
+              alt="Blog"></div>
+          <div class="blog-body">
+            <span class="blog-tag">PARENTING</span>
+            <h3 class="blog-title">10 Best Educational Toys for 5-Year-Olds in 2025</h3>
+            <div class="blog-meta">
+              <span class="blog-meta-item">📅 Dec 15, 2025</span>
+              <span class="blog-meta-item">⏱️ 5 min read</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-card">
+          <div class="blog-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
+              alt="Blog"></div>
+          <div class="blog-body">
+            <span class="blog-tag">GUIDE</span>
+            <h3 class="blog-title">How Renting Toys Saves Families ₹50,000 a Year</h3>
+            <div class="blog-meta">
+              <span class="blog-meta-item">📅 Dec 10, 2025</span>
+              <span class="blog-meta-item">⏱️ 4 min read</span>
+            </div>
+          </div>
+        </div> {% endcomment %}
+        {% comment %} <div class="blog-card">
+          <div class="blog-img"><img src="https://images.unsplash.com/photo-1501159427811-d13c97a2b39d?w=400&q=80"
+              alt="Blog"></div>
+          <div class="blog-body">
+            <span class="blog-tag">STEM</span>
+            <h3 class="blog-title">Best STEM Toys for Curious Kids: 2025 Ultimate Guide</h3>
+            <div class="blog-meta">
+              <span class="blog-meta-item">📅 Dec 5, 2025</span>
+              <span class="blog-meta-item">⏱️ 7 min read</span>
+            </div> {% endcomment %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-inject"></div>
+
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+    window.WISHLIST_COUNT = {{ wishlist_count|default:0 }};</script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+  <script src="{% static 'sta_user/js/main.js' %}"></script>
+</body>
+
+
+
+
+<!-- Toy cards -->
+{% comment %} <div class="toy-card">
+  <a href='/toy_view/'>
+    <div class="toy-card-img">
+      <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80" alt="LEGO City">
+      <span class="toy-card-badge new">NEW</span>
+      <div class="toy-card-actions">
+        <button class="toy-card-action wishlist-btn" data-id="t1" data-name="LEGO City Police Station" data-price="149"
+          data-img="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80"
+          data-tooltip="Wishlist">❤️</button>
+        <a href="pages/toy-detail.html" class="toy-card-action" data-tooltip="Quick View">👁️</a>
+      </div>
+    </div>
+  </a>
+  <div class="toy-card-body">
+    <div class="toy-cat">LEGO · Building</div>
+    <h3 class="toy-name">LEGO City Police Station Set</h3>
+    <div class="toy-rating"><span class="stars">★★★★★</span><span class="rating-count">(128)</span></div>
+    <div class="toy-meta">
+      <div class="toy-price"><span class="current">₹149</span><span class="original">₹899</span><span
+          class="period">/week</span></div>
+      <button class="add-cart-btn add-to-cart-btn" data-id="t1" data-name="LEGO City Police Station" data-price="149"
+        data-img="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80"
+        aria-label="Add to cart">+</button>
+    </div>
+  </div>
+</div>
+<div class="toy-card">
+  <a href='/toy_view/'>
+    <div class="toy-card-img">
+      <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80" alt="Board Game">
+      <span class="toy-card-badge popular">POPULAR</span>
+      <div class="toy-card-actions">
+        <button class="toy-card-action wishlist-btn" data-id="t2" data-name="Catan Board Game" data-price="89"
+          data-img="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80"
+          data-tooltip="Wishlist">❤️</button>
+        <a href="pages/toy-detail.html" class="toy-card-action" data-tooltip="Quick View">👁️</a>
+      </div>
+    </div>
+  </a>
+  <div class="toy-card-body">
+    <div class="toy-cat">Hasbro · Board Game</div>
+    <h3 class="toy-name">Catan Strategy Board Game</h3>
+    <div class="toy-rating"><span class="stars">★★★★★</span><span class="rating-count">(96)</span></div>
+    <div class="toy-meta">
+      <div class="toy-price"><span class="current">₹89</span><span class="period">/week</span></div>
+      <button class="add-cart-btn add-to-cart-btn" data-id="t2" data-name="Catan Board Game" data-price="89"
+        data-img="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80"
+        aria-label="Add to cart">+</button>
+    </div>
+  </div>
+</div>
+<div class="toy-card">
+  <a href='/toy_view/'>
+    <div class="toy-card-img">
+      <img src="https://images.unsplash.com/photo-1561149877-84d268ba65b8?w=400&q=80" alt="RC Car">
+      <span class="toy-card-badge sale">SALE</span>
+      <div class="toy-card-actions">
+        <button class="toy-card-action wishlist-btn" data-id="t3" data-name="RC Monster Truck" data-price="119"
+          data-img="https://images.unsplash.com/photo-1561149877-84d268ba65b8?w=400&q=80"
+          data-tooltip="Wishlist">❤️</button>
+        <a href="pages/toy-detail.html" class="toy-card-action" data-tooltip="Quick View">👁️</a>
+      </div>
+    </div>
+  </a>
+  <div class="toy-card-body">
+    <div class="toy-cat">RC Toys · Cars</div>
+    <h3 class="toy-name">Pro RC Monster Truck 4WD</h3>
+    <div class="toy-rating"><span class="stars">★★★★☆</span><span class="rating-count">(74)</span></div>
+    <div class="toy-meta">
+      <div class="toy-price"><span class="current">₹119</span><span class="original">₹179</span><span
+          class="period">/week</span></div>
+      <button class="add-cart-btn add-to-cart-btn" data-id="t3" data-name="RC Monster Truck" data-price="119"
+        data-img="https://images.unsplash.com/photo-1561149877-84d268ba65b8?w=400&q=80"
+        aria-label="Add to cart">+</button>
+    </div>
+  </div>
+</div>
+<div class="toy-card">
+  <a href='/toy_view/'>
+    <div class="toy-card-img">
+      <img src="https://images.unsplash.com/photo-1590488408134-2e64fa785b4e?w=400&q=80" alt="Puzzle">
+      <div class="toy-card-actions">
+        <button class="toy-card-action wishlist-btn" data-id="t4" data-name="3D Wooden Puzzle" data-price="69"
+          data-img="https://images.unsplash.com/photo-1590488408134-2e64fa785b4e?w=400&q=80"
+          data-tooltip="Wishlist">❤️</button>
+        <a href="pages/toy-detail.html" class="toy-card-action" data-tooltip="Quick View">👁️</a>
+      </div>
+    </div>
+  </a>
+</div>
+</div>
+</div> {% endcomment %}

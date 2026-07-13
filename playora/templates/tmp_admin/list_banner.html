@@ -1,0 +1,141 @@
+{% extends 'tmp_admin/master.html' %}
+{% load static %}
+
+<style>
+    .btn-action-edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f3ff !important;
+        color: #322cb1 !important;
+        border: 2px solid #e0e7ff !important;
+        border-radius: 10px;
+        padding: 12px 20px !important;
+        font-size: 22px !important;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-action-edit:hover {
+        background-color: #e0e7ff !important;
+        color: #4f46e5 !important;
+        border-color: #c7d2fe !important;
+    }
+
+    .btn-action-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        border: 2px solid #b91c1c !important;
+        border-radius: 10px;
+        padding: 12px 20px !important;
+        font-size: 22px !important;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-action-delete:hover {
+        background-color: #b91c1c !important;
+        color: #ffffff !important;
+        border-color: #991b1b !important;
+    }
+
+    .btn-action-edit i {
+        color: #322cb1 !important;
+        font-size: 22px !important;
+    }
+
+    .btn-action-edit:hover i {
+        color: #4f46e5 !important;
+    }
+
+    .btn-action-delete i {
+        color: #ffffff !important;
+        font-size: 22px !important;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+</style>
+
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title">Banner Tables</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> Banner tables </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Banner Table</h4>
+                            <p class="card-description"> ADD <code>Banner</code>
+                            </p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>title</th>
+                                            <th>image</th>
+                                            <th>Description</th>
+                                            <th>Is_active</th>
+                                            <th>created_at</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in bann %}
+                                        <tr>
+                                            <th>{{forloop.counter}}</th>
+                                            <td>{{i.title}}</td>
+                                            <td><img src="{{i.image.url}}" height="20px" width="200px"></td>
+                                            <td>{{i.description}}</td>
+                                            <td>{{i.is_active}}</td>
+                                            <td>{{i.created_at}}</td>
+
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="{% url 'update_banner' i.id %}" class="btn-action-edit"
+                                                        title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a href="{% url 'delete_banner' i.id %}" class="btn-action-delete"
+                                                        title="Delete"
+                                                        onclick="return confirm('Are you sure you want to delete this banner?');">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

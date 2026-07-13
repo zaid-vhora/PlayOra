@@ -1,0 +1,570 @@
+{% extends 'tmp_admin/master.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --track-primary: #6366f1;
+    --track-primary-light: #818cf8;
+    --track-primary-soft: rgba(99, 102, 241, 0.05);
+    --track-secondary: #4f46e5;
+    --track-accent: #f59e0b;
+    --track-success: #10b981;
+    --track-danger: #ef4444;
+    --track-bg: #f8fafc;
+    --track-surface: #ffffff;
+    --track-text-main: #1e293b;
+    --track-text-sub: #64748b;
+    --track-border: #f1f5f9;
+    --track-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --track-shadow: 0 4px 20px -5px rgba(0,0,0,0.05);
+    --track-radius-lg: 1rem;
+    --track-radius-md: 0.75rem;
+  }
+
+  .content-wrapper {
+    background: var(--track-bg) !important;
+    padding: 2rem !important;
+    font-family: 'Inter', sans-serif !important;
+  }
+
+  /* Header Section */
+  .tracking-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .header-left h3 {
+    font-weight: 800;
+    color: var(--track-text-main);
+    font-size: 1.75rem;
+    letter-spacing: -0.025em;
+    margin-bottom: 4px;
+  }
+
+  .header-left p {
+    color: var(--track-text-sub);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-card {
+    background: var(--track-surface);
+    border-radius: var(--track-radius-lg);
+    padding: 1.5rem;
+    border: 1px solid var(--track-border);
+    box-shadow: var(--track-shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--track-shadow);
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--track-text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--track-text-main);
+  }
+
+  .stat-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  /* Data Container */
+  .data-container {
+    background: var(--track-surface);
+    border-radius: var(--track-radius-lg);
+    border: 1px solid var(--track-border);
+    box-shadow: var(--track-shadow-sm);
+    overflow: hidden;
+  }
+
+  .table-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--track-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .table-modern {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table-modern thead th {
+    background: #fdfdfd;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--track-text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--track-border);
+    text-align: left;
+  }
+
+  .table-modern td {
+    padding: 1.25rem 1.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--track-border);
+  }
+
+  /* Identity Styles */
+  .cust-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--track-primary-soft);
+    color: var(--track-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .toy-mini-card {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .toy-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f1f5f9;
+  }
+
+  /* Status Tags */
+  .status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .tag-pending { background: #fffbeb; color: #d97706; }
+  .tag-accepted { background: #f0fdf4; color: #16a34a; }
+  .tag-paid { background: #eff6ff; color: #2563eb; }
+  .tag-shipped { background: #fdf4ff; color: #9333ea; }
+  .tag-delivering { background: #f0fdfa; color: #0d9488; }
+  .tag-completed { background: #f0fdf4; color: #16a34a; }
+
+  /* Journey Visualizer */
+  .journey-compact {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .journey-bar {
+    height: 4px;
+    flex: 1;
+    background: #f1f5f9;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .journey-bar.active { background: var(--track-primary); }
+  .journey-bar.completed { background: var(--track-primary-light); }
+
+  /* Info Labels */
+  .info-group { margin-bottom: 4px; }
+  .info-label { font-size: 0.65rem; color: var(--track-text-sub); font-weight: 600; display: block; margin-bottom: 2px; }
+  .info-value { font-size: 0.85rem; color: var(--track-text-main); font-weight: 700; }
+
+  /* Expandable panels */
+  .details-panel {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 8px;
+    display: none;
+    border: 1px solid #eef2ff;
+  }
+
+  .btn-detail {
+    background: transparent;
+    border: none;
+    color: var(--track-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .btn-detail:hover { text-decoration: underline; }
+
+  /* Search Box */
+  .search-container {
+    position: relative;
+    width: 300px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background: white;
+    border: 1.5px solid var(--track-border);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .search-input:focus {
+    border-color: var(--track-primary);
+    box-shadow: 0 0 0 3px var(--track-primary-soft);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--track-text-sub);
+  }
+</style>
+
+<script>
+  function toggleDetail(id, type) {
+    const el = document.getElementById(type + '-' + id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function showExtensionHistory(id) {
+    const data = document.getElementById('ext-history-data-' + id).innerHTML;
+    document.getElementById('extHistoryBody').innerHTML = data;
+    $('#extHistoryModal').modal('show');
+  }
+
+  function showExtensionDetails(id, originalId, weeks) {
+    document.getElementById('extIdDisplay').innerText = id;
+    document.getElementById('originalIdDisplay').innerText = originalId;
+    document.getElementById('extWeeksDisplay').innerText = weeks + ' Week(s)';
+    $('#extensionDetailModal').modal('show');
+  }
+</script>
+
+<!-- Modals remain the same but with improved styling in the HTML -->
+<div class="modal fade" id="extensionDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+          <div class="modal-header" style="background: var(--track-primary); color: white; border-radius: 20px 20px 0 0; border: none; padding: 1.25rem 1.5rem;">
+              <h6 class="modal-title font-weight-bold"><i class="fa fa-info-circle mr-1"></i> Extension Info</h6>
+              <button type="button" class="close text-white" data-dismiss="modal" style="opacity: 0.8;">&times;</button>
+          </div>
+          <div class="modal-body p-4">
+              <div class="mb-3">
+                  <label style="font-size: 9px; color: #888; font-weight: 800; display: block; text-transform: uppercase;">Request ID</label>
+                  <span class="font-weight-bold" style="font-size: 1rem;" id="extIdDisplay">#--</span>
+              </div>
+              <div class="mb-3">
+                  <label style="font-size: 9px; color: #888; font-weight: 800; display: block; text-transform: uppercase;">Extending Order</label>
+                  <span class="font-weight-bold text-primary" style="font-size: 1rem;" id="originalIdDisplay">#--</span>
+              </div>
+              <div>
+                  <label style="font-size: 9px; color: #888; font-weight: 800; display: block; text-transform: uppercase;">Extension Period</label>
+                  <span class="font-weight-bold" style="color: var(--track-success); font-size: 1.1rem;" id="extWeeksDisplay">-- Week(s)</span>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="extHistoryModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+      <div class="modal-header" style="background: var(--track-primary); color: white; border-radius: 20px 20px 0 0; border: none; padding: 1.25rem 1.5rem;">
+        <h6 class="modal-title font-weight-bold"><i class="fa fa-history mr-1"></i> Extension History</h6>
+        <button type="button" class="close text-white" data-dismiss="modal" style="opacity: 0.8;">&times;</button>
+      </div>
+      <div class="modal-body p-0" id="extHistoryBody" style="max-height: 400px; overflow-y: auto;">
+        <!-- Data injected here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-panel">
+  <div class="content-wrapper">
+    <!-- Header -->
+    <div class="tracking-header">
+      <div class="header-left">
+        <h3>Rental Tracking</h3>
+        <p>Monitor and manage all toy rental lifecycles in real-time.</p>
+      </div>
+      <div class="search-container">
+        <i class="fa fa-search search-icon"></i>
+        <input type="text" id="orderSearch" class="search-input" placeholder="Search by ID, user or toy...">
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div>
+          <span class="stat-label">Active Rentals</span>
+          <span class="stat-value">{{ rentals.count|default:"0" }}</span>
+        </div>
+        <div class="stat-icon-wrapper" style="background: #eef2ff; color: #6366f1;">
+          <i class="fa fa-shopping-bag"></i>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div>
+          <span class="stat-label">In Transit</span>
+          <span class="stat-value">{{ shipped_count|default:"0" }}</span>
+        </div>
+        <div class="stat-icon-wrapper" style="background: #fff7ed; color: #ea580c;">
+          <i class="fa fa-truck"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <span class="stat-label">Total Extensions</span>
+          <span class="stat-value">{{ extension_count|default:"0" }}</span>
+        </div>
+        <div class="stat-icon-wrapper" style="background: #f0fdf4; color: #16a34a;">
+          <i class="fa fa-calendar-check-o"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="data-container">
+      <div class="table-header">
+        <h5 class="m-0 font-weight-bold" style="color: var(--track-text-main);">Master Rental Log</h5>
+        <span style="font-size: 0.7rem; font-weight: 700; color: var(--track-text-sub); background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">{{ rentals.count }} Records Found</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table-modern" id="trackingTable">
+          <thead>
+            <tr>
+              <th style="width: 80px;">Order ID</th>
+              <th>Customer</th>
+              <th>Provider</th>
+              <th>Toy Asset</th>
+              <th style="width: 320px;">Journey Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rental in rentals %}
+            <tr>
+              <td>
+                <span class="font-weight-bold" style="color: var(--track-primary);">#{{ rental.id }}</span>
+              </td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="cust-avatar">
+                    {{ rental.user.username|slice:":1"|upper }}
+                  </div>
+                  <div>
+                    <div class="font-weight-bold" style="font-size: 0.9rem;">{{ rental.first_name }} {{ rental.last_name }}</div>
+                    <div style="font-size: 0.7rem; color: var(--track-text-sub);">@{{ rental.user.username }}</div>
+                    <button class="btn-detail" onclick="toggleDetail('{{ rental.id }}', 'shipping')">
+                      <i class="fa fa-map-marker"></i> Shipping Details
+                    </button>
+                    <div id="shipping-{{ rental.id }}" class="details-panel">
+                      <div class="info-group">
+                        <span class="info-label">ADDRESS</span>
+                        <span class="info-value" style="font-size: 0.75rem;">{{ rental.address }}, {{ rental.city }} - {{ rental.pincode }}</span>
+                      </div>
+                      <div class="info-group m-0">
+                        <span class="info-label">CONTACT</span>
+                        <span class="info-value" style="font-size: 0.75rem;">{{ rental.phone }} | {{ rental.email }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="cust-avatar" style="background: #f1f5f9; color: #475569;">
+                    {{ rental.rental_provider.username|slice:":1"|upper }}
+                  </div>
+                  <div>
+                    <div class="font-weight-bold" style="font-size: 0.9rem;">{{ rental.rental_provider.username }}</div>
+                    <div style="font-size: 0.65rem; color: #64748b; font-weight: 700;">OFFICIAL PARTNER</div>
+                    <button class="btn-detail" style="color: #64748b;" onclick="toggleDetail('{{ rental.id }}', 'provider')">
+                      <i class="fa fa-briefcase"></i> Provider Details
+                    </button>
+                    <div id="provider-{{ rental.id }}" class="details-panel" style="background: #f1f5f9;">
+                      <div class="info-group">
+                        <span class="info-label">OFFICE</span>
+                        <span class="info-value" style="font-size: 0.75rem;">{{ rental.rental_provider.city|default:"Not specified" }}</span>
+                      </div>
+                      <div class="info-group m-0">
+                        <span class="info-label">DIRECT</span>
+                        <span class="info-value" style="font-size: 0.75rem;">{{ rental.rental_provider.phone|default:"N/A" }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="toy-mini-card">
+                  <img src="{{ rental.toy.image.url }}" class="toy-thumb" alt="Asset">
+                  <div>
+                    <div class="font-weight-bold" style="font-size: 0.85rem;">{{ rental.toy.name }}</div>
+                    <div style="font-size: 0.7rem; color: var(--track-text-sub);">
+                      ₹{{ rental.total_price }} • {{ rental.rental_duration_weeks }} Week{{ rental.rental_duration_weeks|pluralize }}
+                    </div>
+                    {% if rental.rental_end_date %}
+                      <div style="font-size: 0.7rem; color: var(--track-accent); font-weight: 800; margin-top: 2px;">
+                        <i class="fa fa-clock-o"></i> ENDS: {{ rental.rental_end_date|date:"d M, Y" }}
+                      </div>
+                      
+                      <!-- Return Countdown -->
+                      {% if rental.status == 'COMPLETED' or rental.status == 'DELIVERING' or rental.status == 'SHIPPED' %}
+                        <div style="font-size: 9px; margin-top: 4px; padding: 2px 6px; background: {% if rental.days_remaining >= 0 %}#f0fdf4{% else %}#fef2f2{% endif %}; color: {% if rental.days_remaining >= 0 %}#16a34a{% else %}#ef4444{% endif %}; border-radius: 4px; display: inline-block; font-weight: 800; border: 1px solid {% if rental.days_remaining >= 0 %}#dcfce7{% else %}#fee2e2{% endif %};">
+                            {% if rental.days_remaining > 0 %}
+                                {{ rental.days_remaining }} DAYS REMAINING
+                            {% elif rental.days_remaining == 0 %}
+                                DUE TODAY
+                            {% else %}
+                                OVERDUE BY {{ rental.days_overdue }} DAYS!
+                            {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endif %}
+
+                    {% if rental.extensions.all %}
+                      <button class="btn-detail" style="color: #6366f1; background: #eef2ff; padding: 2px 8px; border-radius: 4px; margin-top: 5px;" onclick="showExtensionHistory('{{ rental.id }}')">
+                        <i class="fa fa-history"></i> Extension Log ({{ rental.extensions.count }})
+                      </button>
+                      <div id="ext-history-data-{{ rental.id }}" style="display:none;">
+                        {% for ext in rental.extensions.all %}
+                            <div style="padding: 0.75rem; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.8rem; color: var(--track-primary);">
+                                    <span>+{{ ext.rental_duration_weeks }} Week{{ ext.rental_duration_weeks|pluralize }}</span>
+                                    <span>₹{{ ext.total_price }}</span>
+                                </div>
+                                <div style="font-size: 0.65rem; color: var(--track-text-sub); margin-top: 2px;">Approved on {{ ext.created_at|date:"d M, Y" }}</div>
+                            </div>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="status-tag tag-{{ rental.status|lower }}">
+                    <i class="fa fa-circle"></i> {{ rental.status }}
+                  </span>
+                  {% if rental.is_extension %}
+                    <span style="font-size: 0.6rem; font-weight: 800; color: var(--track-primary); background: var(--track-primary-soft); padding: 2px 6px; border-radius: 4px;">EXTENSION</span>
+                  {% endif %}
+                </div>
+                
+                <div class="journey-compact">
+                  <div class="journey-bar completed"></div>
+                  <div class="journey-bar {% if rental.status != 'PENDING' and rental.status != 'REJECTED' %}completed{% else %}active{% endif %}"></div>
+                  <div class="journey-bar {% if rental.status == 'PAID' or rental.status == 'SHIPPED' or rental.status == 'DELIVERING' or rental.status == 'COMPLETED' %}completed{% elif rental.status == 'PAID' %}active{% endif %}"></div>
+                  <div class="journey-bar {% if rental.status == 'SHIPPED' or rental.status == 'DELIVERING' or rental.status == 'COMPLETED' %}completed{% elif rental.status == 'SHIPPED' %}active{% endif %}"></div>
+                  <div class="journey-bar {% if rental.status == 'DELIVERING' or rental.status == 'COMPLETED' %}completed{% elif rental.status == 'DELIVERING' %}active{% endif %}"></div>
+                  <div class="journey-bar {% if rental.status == 'COMPLETED' %}completed{% endif %}"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                  <span style="font-size: 0.55rem; color: #94a3b8; font-weight: 800;">PLACED</span>
+                  <span style="font-size: 0.55rem; color: #94a3b8; font-weight: 800;">DONE</span>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-5">
+                <div style="opacity: 0.2; font-size: 3rem; margin-bottom: 1rem;"><i class="fa fa-database"></i></div>
+                <h6 class="text-muted font-weight-bold">No active rental logs found</h6>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function toggleDetail(id, type) {
+        const el = document.getElementById(type + '-' + id);
+        if (el) {
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    function showExtensionHistory(id) {
+        const data = document.getElementById('ext-history-data-' + id).innerHTML;
+        document.getElementById('extHistoryBody').innerHTML = data;
+        $('#extHistoryModal').modal('show');
+    }
+
+    function showExtensionDetails(id, originalId, weeks) {
+        document.getElementById('extIdDisplay').innerText = id;
+        document.getElementById('originalIdDisplay').innerText = originalId;
+        document.getElementById('extWeeksDisplay').innerText = weeks + ' Week(s)';
+        $('#extensionDetailModal').modal('show');
+    }
+
+    // Real-time Order Search
+    document.getElementById('orderSearch').addEventListener('keyup', function() {
+        const value = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#trackingTable tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}  
+    {% comment %}  {% endcomment %}
+      
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Form elements</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#" >Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Form elements </li>
+                </ol>
+              </nav>
+            </div>
+              <form method="post" enctype="multipart/form-data">
+              {%csrf_token%}              
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Rental</h4>
+                    <p class="card-description">rental form</p>
+                    <form class="forms-sample">
+                   
+                         <div class="form-group row">
+                            <label for="Inputnumber" class="col-sm-3 col-form-label">Rental Number</label>
+                            <div class="col-sm-10">
+                              <input type="number" name="rental_number" class="form-control" />
+                            </div>
+                        </div>  
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">User</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="user_name" class="form-control" id="exampleInputtext" placeholder="user_name" / required/>
+                        </div>
+                      </div>
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Toy</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="toy" class="form-control" id="exampleInputtext" placeholder="toy"  / required/>
+                        </div>
+                    </div>
+                      {% comment %} <div class="form-group row">
+                        <label for="Inputfile" class="col-sm-3 col-form-label">image</label>
+                        <div class="col-sm-9">
+                          <input type="file" name="image" class="form-control"  />
+                        </div>
+                      </div> {% endcomment %}
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Quantity</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="quantity" class="form-control" id="exampleInputtext" placeholder="Qu...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Rental_start_date</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="rental_start_date" class="form-control"  id="exampleInputdate" placeholder="r sta date...."  / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Rental_end_date</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="rental_end_date" class="form-control" id="exampleInputdate" placeholder="r end date...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Actual_return_date</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="actual_return_date" class="form-control" id="exampleInputdate" placeholder="return ...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Total_days</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="total_days" class="form-control" id="exampleInputnumber" placeholder="dayss...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Rental_amount</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="rental_amount" class="form-control"id="exampleInputnumber" placeholder="amount...."  /   required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Security_deposit</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="security_deposit" class="form-control" id="exampleInputnumber" placeholder="s deposite..."  / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Late_fee</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="late_fee" class="form-control" id="exampleInputnumber" placeholder="late feess...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Discount_amount</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="discount_amount" class="form-control" id="exampleInputnumber" placeholder="dc am...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Total_amount</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="total_amount" class="form-control" id="exampleInputnumber" placeholder="t am...."  / required/>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">status</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="status" class="form-control" id="exampleInputtext" placeholder="Qu...." / required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">payment_status</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="payment_status" class="form-control" id="exampleInputtext" placeholder="p status...." / required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Created_at</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="created_at" class="form-control" id="exampleInputdate" placeholder="created at." / required/>
+                        </div>
+                    </div>
+
+                    
+
+
+                      
+                      {% comment %} <div class="form-group row">
+                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password" />
+                        </div>
+                      </div> {% endcomment %}
+                      {% comment %} <div class="form-check form-check-flat form-check-primary">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input" /> Remember me  </label>
+                      </div> {% endcomment %}
+                      <button type="submit" class="btn btn-primary mr-2" > Submit </button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+          {% comment %}  {% endcomment %}
+          {% endblock %}

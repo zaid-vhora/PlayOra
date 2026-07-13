@@ -1,0 +1,98 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}  
+    {% comment %}  {% endcomment %}
+      
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Form elements</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"   >Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Form elements </li>
+                </ol>
+              </nav>
+            </div>
+              <form method="post" enctype="multipart/form-data">
+              {%csrf_token%}              
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">CONTACT MESSAGE </h4>
+                    <p class="card-description"> form</p>
+                    <form class="forms-sample">
+                   
+                      {% comment %} <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Id</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="id" class="form-control" />
+                        </div>
+                      </div> {% endcomment %}
+                      <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Code</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="code" class="form-control" id="exampleInputnumber" placeholder="code" / required>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Discount_type</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="discount_type" class="form-control" id="exampleInputtext" placeholder="discount_type..." / required>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Discount_value</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="discount_value" class="form-control" id="exampleInputnumber" placeholder="discount_value" / required>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Minimum_amount</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="minimum_amount" class="form-control" id="exampleInputnumber" placeholder="minimum_amount" / required>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Expiry_date</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="expiry_date" class="form-control" id="exampleInputdate" placeholder="expireat  " / required>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group row">
+                        <label for="Inputboolean" class="col-sm-3 col-form-label">Is_active</label>
+                        <div class="col-sm-9">
+                          <input type="checkbox" name="is_active" class="form-control"  / required>
+                        </div>
+                      </div>
+
+
+                      
+                      
+                     
+                      
+                      
+                      <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">Created_at</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="created_at" class="form-control" id="exampleInputboolean" placeholder="created at" / required>
+                        </div>
+                      </div>
+                      {% comment %} <div class="form-group row">
+                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password" />
+                        </div>
+                      </div> {% endcomment %}
+                     
+                      <button type="submit" class="btn btn-primary mr-2"  > Submit </button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+          {% comment %}  {% endcomment %}
+          {% endblock %}

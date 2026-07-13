@@ -1,0 +1,405 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-orange: #ff4907;
+        --secondary-orange: #ff8a5c;
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-muted: #a0a0a0;
+        --card-bg: #1e1e2d;
+        --accent-blue: #4e73df;
+    }
+
+    .content-wrapper {
+        background: #151521 !important;
+        padding-top: 5rem !important;
+    }
+
+    .profile-card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        border: 1px solid var(--glass-border);
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        transition: all 0.3s ease;
+    }
+
+    .profile-header-banner {
+        height: 180px;
+        background: linear-gradient(135deg, var(--primary-orange), #ffb300, #ff4907);
+        background-size: 200% 200%;
+        animation: gradientBG 10s ease infinite;
+        position: relative;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .profile-header-content {
+        padding: 0 2rem 2.5rem;
+        margin-top: -70px;
+        position: relative;
+        text-align: center;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-avatar {
+        width: 160px;
+        height: 160px;
+        border-radius: 30px;
+        border: 6px solid var(--card-bg);
+        object-fit: cover;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        background: #000;
+    }
+
+    .change-photo-btn {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: var(--primary-orange);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 3px solid var(--card-bg);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .change-photo-btn:hover {
+        transform: scale(1.2) rotate(15deg);
+        background: white;
+        color: var(--primary-orange);
+    }
+
+    .profile-name {
+        font-family: 'Fredoka One', cursive;
+        font-size: 2.2rem;
+        color: white;
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.5px;
+    }
+
+    .profile-role {
+        color: var(--primary-orange);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.75rem;
+        background: rgba(255, 73, 7, 0.1);
+        padding: 0.4rem 1.2rem;
+        border-radius: 50px;
+        display: inline-block;
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-5px);
+        border-color: var(--primary-orange);
+    }
+
+    .stat-value {
+        font-family: 'Fredoka One', cursive;
+        font-size: 1.8rem;
+        color: white;
+        display: block;
+    }
+
+    .stat-label {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .profile-body {
+        padding: 2.5rem;
+    }
+
+    .section-title {
+        font-family: 'Fredoka One', cursive;
+        color: white;
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .section-title i {
+        background: linear-gradient(45deg, var(--primary-orange), #ffb300);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 1.6rem;
+    }
+
+    .custom-form-group {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .custom-form-group label {
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background: var(--card-bg);
+        padding: 0 8px;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 1;
+    }
+
+    .form-control {
+        background: transparent !important;
+        border: 2px solid var(--glass-border) !important;
+        border-radius: 15px !important;
+        color: white !important;
+        padding: 1rem 1.2rem !important;
+        height: auto !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-orange) !important;
+        box-shadow: 0 0 0 4px rgba(255, 73, 7, 0.1) !important;
+    }
+
+    .btn-save {
+        background: linear-gradient(45deg, var(--primary-orange), #ff8a5c);
+        border: none;
+        padding: 1.2rem 3rem;
+        border-radius: 18px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 20px rgba(255, 73, 7, 0.3);
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(255, 73, 7, 0.5);
+    }
+
+    .alert {
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="container-fluid px-lg-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'success' %}success{% else %}warning{% endif %} alert-dismissible fade show border-0 shadow-lg mb-5" role="alert" style="background: rgba({% if message.tags == 'success' %}74, 222, 128{% else %}251, 191, 36{% endif %}, 0.15); color: {% if message.tags == 'success' %}#4ade80{% else %}#fbbf24{% endif %};">
+                    <strong><i class="mdi mdi-check-decagram mr-2"></i></strong> {{ message }}
+                    <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'rental_profile_view' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Left Column: Sidebar Profile Info -->
+                <div class="col-xl-4 col-lg-5">
+                    <div class="profile-card mb-4">
+                        <div class="profile-header-banner"></div>
+                        <div class="profile-header-content">
+                            <div class="avatar-wrapper">
+                                {% if user.profile_image %}
+                                    <img src="{{ user.profile_image.url }}" id="profile-img-tag" class="profile-avatar">
+                                {% else %}
+                                    <img src="{% static 'sta_rental/assets/images/image.png' %}" id="profile-img-tag" class="profile-avatar">
+                                {% endif %}
+                                <label for="profile_image_input" class="change-photo-btn">
+                                    <i class="mdi mdi-pencil"></i>
+                                </label>
+                                <input type="file" name="profile_image" id="profile_image_input" style="display: none;" accept="image/*">
+                            </div>
+                            <h2 class="profile-name">{{ user.username }}</h2>
+                            <p class="profile-role">{{ user.get_role_display }}</p>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <div class="stat-box">
+                                        <span class="stat-value">{{ toy_count }}</span>
+                                        <span class="stat-label">Total Toys</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-box">
+                                        <span class="stat-value">{{ request_count }}</span>
+                                        <span class="stat-label">Requests</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 text-left p-3" style="background: rgba(255,255,255,0.02); border-radius: 20px;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="mdi mdi-calendar-check text-warning mr-3" style="font-size: 1.4rem;"></i>
+                                    <div>
+                                        <small class="text-muted d-block uppercase font-weight-bold" style="font-size: 0.65rem;">Joined Since</small>
+                                        <span class="text-white">{{ user.date_joined|date:"F d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-shield-check text-success mr-3" style="font-size: 1.4rem;"></i>
+                                    <div>
+                                        <small class="text-muted d-block uppercase font-weight-bold" style="font-size: 0.65rem;">Account Status</small>
+                                        <span class="badge badge-success px-2 rounded-pill" style="font-size: 0.7rem;">Verified Provider</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form Sections -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="profile-card">
+                        <div class="profile-body">
+                            <div class="section-title">
+                                <i class="mdi mdi-account-cog"></i> Personal Identity
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Username</label>
+                                        <input type="text" name="username" class="form-control" value="{{ user.username }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Email Address</label>
+                                        <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Primary Contact</label>
+                                        <input type="text" name="phone" class="form-control" value="{{ user.phone|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Gender Selection</label>
+                                        <select name="gender" class="form-control">
+                                            <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+                                            <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+                                            <option value="Other" {% if user.gender == 'Other' %}selected{% endif %}>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-title mt-4">
+                                <i class="mdi mdi-briefcase-account"></i> Business Information
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Alternative Phone</label>
+                                        <input type="text" name="alternate_phone" class="form-control" value="{{ user.alternate_phone|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label>Emergency Line</label>
+                                        <input type="text" name="emergency_contact" class="form-control" value="{{ user.emergency_contact|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="custom-form-group">
+                                        <label>Full Business Address</label>
+                                        <textarea name="address" class="form-control" rows="3">{{ user.address|default:'' }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="custom-form-group">
+                                        <label>City</label>
+                                        <input type="text" name="city" class="form-control" value="{{ user.city|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="custom-form-group">
+                                        <label>State / Province</label>
+                                        <input type="text" name="state" class="form-control" value="{{ user.state|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="custom-form-group">
+                                        <label>Postal Pincode</label>
+                                        <input type="text" name="pincode" class="form-control" value="{{ user.pincode|default:'' }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <button type="submit" class="btn-save">
+                                    Save Profile Transformation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profile-img-tag').src = e.target.result;
+                // Add a small bounce animation to indicate image load
+                document.getElementById('profile-img-tag').style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    document.getElementById('profile-img-tag').style.transform = 'scale(1)';
+                }, 200);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    document.getElementById('profile_image_input').onchange = function() {
+        readURL(this);
+    };
+</script>
+{% endblock %}

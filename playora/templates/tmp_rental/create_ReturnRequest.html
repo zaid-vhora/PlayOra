@@ -1,0 +1,107 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}  
+    {% comment %}  {% endcomment %}
+      
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Form elements</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#" >Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Form elements </li>
+                </ol>
+              </nav>
+            </div>
+              <form method="post" enctype="multipart/form-data">
+              {%csrf_token%}              
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">ReturnRequest</h4>
+                    <p class="card-description">ReturnRequest form</p>
+                    <form class="forms-sample">
+                   
+                      {% comment %} <div class="form-group row">
+                        <label for="Inputnumber" class="col-sm-3 col-form-label">Id</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="id" class="form-control" />
+                        </div>
+                      </div> {% endcomment %}
+                      <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">Rental_id</label>
+                        <div class="col-sm-9">
+                          <select class="form-select" name="rental_id" id="floatingSelect" aria-label="Floating label select example">
+                              <option selected>Open this select menu</option>
+                              {% for r in rental %}
+                              <option value="{{r.id}}">{{r.rental_id}}</option>
+                              {% endfor %}
+                        </select> 
+                        </div>
+                      </div>
+
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">User</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="user" class="form-control" id="exampleInputtext" placeholder="user" />
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="form-group row">
+                        <label for="Inputtext" class="col-sm-3 col-form-label">return_reason</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="return_reason" class="form-control" id="exampleInputtext" placeholder="why return ...."  />
+                        </div>
+                    </div>
+                      
+                      {% comment %} <div class="form-group row">
+                        <label for="Inputfile" class="col-sm-3 col-form-label">image</label>
+                        <div class="col-sm-9">
+                          <input type="file" name="image" class="form-control"  />
+                        </div>
+                      </div> {% endcomment %}
+                      <div class="form-group row">
+                        <label for="Inputboolean" class="col-sm-3 col-form-label">approval_status</label>
+                        <div class="col-sm-9">
+                          <input type="boolean" name="approval_status" class="form-control" id="exampleInputboolean" placeholder="y or n"  />
+                        </div>
+                      </div>
+                      
+
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">requested_at</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="requested_at" class="form-control" id="exampleInputtext" placeholder="requested at" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="Inputdate" class="col-sm-3 col-form-label">approved_at</label>
+                        <div class="col-sm-9">
+                          <input type="date" name="approved_at" class="form-control" id="exampleInputtext" placeholder="approved at" />
+                        </div>
+                    </div>
+
+
+                      
+                      {% comment %} <div class="form-group row">
+                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password" />
+                        </div>
+                      </div> {% endcomment %}
+                      {% comment %} <div class="form-check form-check-flat form-check-primary">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input" /> Remember me  </label>
+                      </div> {% endcomment %}
+                      <button type="submit" class="btn btn-primary mr-2" > Submit </button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+          {% comment %}  {% endcomment %}
+          {% endblock %}

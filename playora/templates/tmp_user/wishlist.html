@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist – PlayOra</title>
+  <link rel="icon" type="image/x-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+  <link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+</head>
+
+<body data-page="wishlist">
+  <div id="header-inject"></div>
+  <div class="breadcrumb-section">
+    <div class="container">
+      <h1 class="breadcrumb-title">My Wishlist ❤️</h1>
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-sep">›</li>
+        <li class="breadcrumb-item active">Wishlist</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      {% if wishlist %}
+      <div
+        style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px">
+        <h2 style="font-size:22px;font-weight:800;color:var(--dark)">Saved Toys <span
+            style="color:var(--text-muted);font-size:16px">({{ wishlist|length }} items)</span></h2>
+      </div>
+
+      <div class="toys-grid-4 fade-in">
+        {% for key, value in wishlist.items %}
+        <div class="toy-card">
+          <div class="toy-card-img">
+            {% if value.image %}
+            <img src="{{ value.image }}" alt="{{ value.name }}">
+            {% else %}
+            <div style="background:#f0f0f0; height:100%; display:flex; align-items:center; justify-content:center;">🧸</div>
+            {% endif %}
+            <div class="toy-card-actions" style="opacity:1;transform:translateX(0)">
+              <a href="{% url 'wishlist_remove' value.product_id %}" class="toy-card-action" data-tooltip="Remove">🗑️</a>
+            </div>
+          </div>
+          <div class="toy-card-body">
+            <h3 class="toy-name">{{ value.name }}</h3>
+            <div class="toy-meta">
+              <div class="toy-price"><span class="current">₹{{ value.price }}</span><span class="period">/wk</span></div>
+              <button class="add-cart-btn add-to-cart-btn" data-id="{{ value.product_id }}" data-name="{{ value.name }}"
+                data-price="{{ value.price }}" data-img="{{ value.image }}">+</button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div style="text-align:center;margin-top:32px">
+        <a href="/shop_view/" class="btn btn-outline">← Continue Browsing</a>
+      </div>
+      {% else %}
+      <div class="text-center" style="padding: 60px 0;">
+        <div style="font-size: 60px; margin-bottom: 20px;">❤️</div>
+        <h2 style="font-weight: 800; color: var(--dark);">Your Wishlist is Empty</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">Save the toys you love for later!</p>
+        <a href="/shop_view/" class="btn btn-primary">Go to Shop</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <div id="footer-inject"></div>
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+  <script src="{% static 'sta_user/js/main.js' %}"></script>
+</body>
+
+</html>

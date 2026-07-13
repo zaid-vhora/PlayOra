@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+ {% load static %} 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ – PlayOra</title>
+<link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+<link rel="stylesheet" href="{% static 'sta_user/css/style.css' %}">
+</head>
+<body data-page="">
+<div id="header-inject"></div>
+<div class="breadcrumb-section">
+  <div class="container">
+    <h1 class="breadcrumb-title">Frequently Asked Questions</h1>
+    <ul class="breadcrumb">
+      <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+      <li class="breadcrumb-sep">›</li>
+      <li class="breadcrumb-item active">FAQ</li>
+    </ul>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container container-sm">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="section-badge">❓ Need Help?</div>
+      <h2 class="section-title">We Have <span>Answers</span></h2>
+      <div style="max-width:400px;margin:16px auto 0">
+        <div class="input-icon-wrap"><span class="input-icon">🔍</span><input class="form-control" type="text" placeholder="Search questions..." id="faqSearch" oninput="filterFAQ(this.value)"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:36px">
+      <button class="tag tag-outline active">All</button>
+      <button class="tag tag-outline">Renting</button>
+      <button class="tag tag-outline">Delivery</button>
+      <button class="tag tag-outline">Payment</button>
+      <button class="tag tag-outline">Returns</button>
+      <button class="tag tag-outline">Safety</button>
+    </div>
+
+    <div id="faqContainer" class="fade-in">
+      <div style="font-weight:800;font-size:13px;color:var(--text-muted);letter-spacing:1px;margin-bottom:12px;padding:0 4px">🛍️ RENTING</div>
+      <div class="faq-block">
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">How long can I rent a toy? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">You can rent for 1 week, 2 weeks, or 1 month. You can also extend your rental at any time through the app or by calling us. Monthly subscription plans are also available.</div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">How many toys can I rent at once? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">On pay-per-toy plans, there's no limit — rent as many as you like. Our Family plan includes up to 3 toys/month, and Premium includes unlimited toys.</div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">Can I buy the toy if I love it? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">Yes! Contact us before your rental ends and we'll offer a discounted buy price. We deduct the rental fees already paid from the purchase price.</div>
+        </div>
+      </div>
+
+      <div style="font-weight:800;font-size:13px;color:var(--text-muted);letter-spacing:1px;margin:28px 0 12px;padding:0 4px">🚚 DELIVERY</div>
+      <div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">How fast do you deliver? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">Same-day delivery in Mumbai (order by 12PM). Next-day delivery in Pune, Bangalore, Delhi, Hyderabad, and Chennai. 2-3 days for all other 25+ cities we serve.</div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">Is delivery free? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">Free delivery on orders above ₹199. For smaller orders, a ₹49 delivery fee applies. Return pickup is always free.</div>
+        </div>
+      </div>
+
+      <div style="font-weight:800;font-size:13px;color:var(--text-muted);letter-spacing:1px;margin:28px 0 12px;padding:0 4px">🔒 SAFETY</div>
+      <div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">How are toys sanitized? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">Every returned toy is inspected, washed with child-safe antibacterial solutions, UV sanitized, and re-checked for completeness. A certificate of sanitization is included with every delivery.</div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden">
+          <button onclick="toggleFAQ(this)" style="width:100%;padding:18px 20px;background:none;border:none;font-size:15px;font-weight:800;color:var(--dark);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body)">Are all toys safe for children? <span style="font-size:16px;transition:transform 0.2s">▾</span></button>
+          <div style="display:none;padding:0 20px 18px;font-size:14px;color:var(--text-light);line-height:1.8">Yes. We only stock toys from reputable brands that meet international safety standards (BIS, EN71, ASTM). Age recommendations are strictly followed and verified.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px;background:white;border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px" class="fade-in">
+      <div style="font-size:48px;margin-bottom:16px">🤔</div>
+      <h3 style="font-weight:800;font-size:22px;color:var(--dark);margin-bottom:8px">Still have questions?</h3>
+      <p style="color:var(--text-muted);margin-bottom:24px">Our friendly support team is happy to help!</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="contact.html" class="btn btn-primary">📨 Contact Us</a>
+        <a href="https://wa.me/919876543210" class="btn btn-secondary">💬 WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-inject"></div>
+  <script>
+    window.USER_AUTH = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+    window.USER_NAME = "{{ request.user.username }}";
+    window.CART_COUNT = {{ cart_count|default:0 }};
+  </script>
+  <script src="{% static 'sta_user/js/components.js' %}"></script>
+<script src="{% static 'sta_user/js/main.js' %}"></script>
+<script>
+function toggleFAQ(btn) {
+  const body = btn.nextElementSibling;
+  const arrow = btn.querySelector('span');
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+function filterFAQ(val) {
+  document.querySelectorAll('.faq-block > div, [style*="border-radius:var(--radius)"]').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(val.toLowerCase()) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #INV-{{ req.id }} | PlayOra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4907;
+            --secondary: #ff8a5c;
+            --dark: #1e1e2d;
+            --light: #f8f9fa;
+            --success: #2cb175;
+            --text: #444;
+            --border: #edf2f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .no-print {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-print { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 73, 7, 0.3); }
+        .btn-close { background: white; color: var(--dark); border: 1px solid #ddd; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        .invoice-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Decorative Header */
+        .invoice-header {
+            background: var(--dark);
+            color: white;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invoice-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .brand-section h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .brand-section p {
+            margin: 5px 0 0;
+            opacity: 0.8;
+            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .invoice-meta {
+            text-align: right;
+        }
+
+        .invoice-id {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            background: var(--success);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .invoice-body {
+            padding: 40px;
+        }
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .address-box h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .address-box p {
+            margin: 5px 0;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .invoice-table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 15px 20px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #64748b;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .invoice-table td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .item-desc h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .item-desc span {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .summary-wrapper {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .summary-table {
+            width: 300px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-weight: 600;
+        }
+
+        .summary-row.total {
+            margin-top: 15px;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .footer {
+            padding: 40px;
+            background: #fcfcfc;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(0,0,0,0.02);
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        @media print {
+            body { 
+                background: white; 
+                padding: 0; 
+                margin: 0; 
+                font-size: 13px; /* Smaller font for print */
+            }
+            .no-print { display: none; }
+            .watermark { display: none; } /* Remove watermark to save processing/space */
+            
+            .invoice-wrapper { 
+                box-shadow: none; 
+                border-radius: 0; 
+                width: 100%; 
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none;
+            }
+            .invoice-header { 
+                padding: 20px; 
+                height: auto; 
+            }
+            .brand-section h1 { font-size: 1.8rem; }
+            .invoice-id { font-size: 1.1rem; }
+            
+            .invoice-body { padding: 15px 25px; }
+            .address-grid { margin-bottom: 20px; gap: 20px; }
+            .address-box h3 { margin-bottom: 8px; font-size: 0.8rem; }
+            
+            .invoice-table th, .invoice-table td { padding: 10px 15px; }
+            .item-desc h4 { font-size: 0.95rem; }
+            
+            .summary-table { width: 250px; }
+            .summary-row.total { 
+                padding: 12px; 
+                font-size: 1.1rem; 
+                margin-top: 10px;
+                border: 2px solid var(--primary) !important;
+                color: var(--primary) !important;
+                background: transparent !important;
+            }
+            
+            .footer { padding: 15px; margin-top: 20px; }
+            .footer p { font-size: 0.8rem; }
+            
+            /* Verification box shrink */
+            div[style*="background: #f8fafc"] {
+                padding: 15px !important;
+                margin-top: 30px !important;
+            }
+        }
+        
+        @page {
+            size: A4;
+            margin: 0.5cm;
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button class="btn btn-print" onclick="window.print()">
+            <span>🖨️</span> Print Invoice
+        </button>
+        <button class="btn btn-close" onclick="window.close()">
+            Close
+        </button>
+    </div>
+
+    <div class="invoice-wrapper">
+        <div class="watermark">PlayOra</div>
+        
+        <header class="invoice-header">
+            <div class="brand-section">
+                <h1>PlayOra</h1>
+                <p>PREMIUM TOY RENTALS</p>
+            </div>
+            <div class="invoice-meta">
+                <div class="invoice-id">#INV-{{ req.id|stringformat:"05d" }}</div>
+                <div style="margin-bottom: 10px;">Date: <strong>{{ req.updated_at|date:"d M, Y" }}</strong></div>
+                <span class="status-badge">Payment Successful</span>
+            </div>
+        </header>
+
+        <div class="invoice-body">
+            <div class="address-grid">
+                <div class="address-box">
+                    <h3>Issued By</h3>
+                    <p><strong>{% if req.rental_provider.first_name %}{{ req.rental_provider.first_name }} {{ req.rental_provider.last_name }}{% else %}{{ req.rental_provider.username }}{% endif %}</strong></p>
+                    <p>{{ req.rental_provider.email }}</p>
+                    <p>{{ req.rental_provider.phone|default:"PlayOra Provider" }}</p>
+                    <p>{{ req.rental_provider.address|default:"" }}</p>
+                </div>
+                <div class="address-box">
+                    <h3>Billed To</h3>
+                    <p><strong>{{ req.first_name }} {{ req.last_name }}</strong></p>
+                    <p>{{ req.phone }}</p>
+                    <p>{{ req.address }}</p>
+                    <p>{{ req.city }}, {{ req.pincode }}</p>
+                </div>
+            </div>
+
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th style="text-align: center;">Qty</th>
+                        <th style="text-align: right;">Unit Price</th>
+                        <th style="text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-desc">
+                            <h4>{{ req.toy.name }}</h4>
+                            <span>Premium Toy Rental Service</span>
+                        </td>
+                        <td style="text-align: center;">{{ req.quantity }}</td>
+                        <td style="text-align: right;">₹{{ req.toy.rental_price_per_week }}</td>
+                        <td style="text-align: right;">₹{{ req.total_price }}</td>
+                    </tr>
+                    <tr>
+                        <td class="item-desc">
+                            <h4>Security Deposit</h4>
+                            <span>Refundable amount upon return</span>
+                        </td>
+                        <td style="text-align: center;">1</td>
+                        <td style="text-align: right;">₹{{ req.security_deposit }}</td>
+                        <td style="text-align: right;">₹{{ req.security_deposit }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="summary-wrapper">
+                <div class="summary-table">
+                    <div class="summary-row">
+                        <span style="color: #888;">Rental Total</span>
+                        <span>₹{{ req.total_price }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color: #888;">Security Deposit</span>
+                        <span>₹{{ req.security_deposit }}</span>
+                    </div>
+                    <div class="summary-row" style="border-top: 1px solid var(--border); margin-top: 5px;">
+                        <span>Subtotal</span>
+                        <span>₹{{ req.total_price|add:req.security_deposit }}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Paid</span>
+                        <span>₹{{ req.total_price|add:req.security_deposit }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; display: flex; align-items: center; gap: 20px; background: #f8fafc; padding: 25px; border-radius: 20px; border: 1px dashed #cbd5e1;">
+                <div style="font-size: 2rem;">🛡️</div>
+                <div>
+                    <h4 style="margin: 0; color: var(--dark);">Payment Verified</h4>
+                    <p style="margin: 5px 0 0; font-size: 0.85rem; color: #64748b;">Transaction processed via {{ req.get_payment_method_display }} on {{ req.updated_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div style="margin-bottom: 20px;">
+                <p><strong>PlayOra - Premium Kids Experiences</strong></p>
+                <p>Thank you for choosing us for your child's happiness!</p>
+            </div>
+            <p style="font-size: 0.7rem; opacity: 0.5;">This is a system-generated document and does not require a physical signature.</p>
+        </footer>
+    </div>
+</body>
+</html>

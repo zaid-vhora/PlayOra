@@ -1,0 +1,537 @@
+{% extends 'tmp_rental/master_rental.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    :root {
+        --brand-orange: #FF6B35;
+        --brand-teal: #4ECDC4;
+        --brand-purple: #C77DFF;
+        --brand-dark: #1A1A2E;
+        --brand-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 100%);
+        --surface: #ffffff;
+        --background: #f8faff;
+        --text-primary: #1A1A2E;
+        --text-secondary: #6B7280;
+        --border-soft: rgba(0, 0, 0, 0.05);
+        --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        --radius-premium: 1rem;
+    }
+
+    .content-wrapper {
+        background: var(--background) !important;
+        padding: 1.5rem !important;
+        min-height: calc(100vh - 70px);
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Page Title Section */
+    .page-title-section {
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-main-info h3 {
+        font-weight: 800;
+        color: var(--brand-dark);
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+    }
+
+    .page-main-info p {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+    }
+
+    /* Professional Stats Section */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .premium-stat-card {
+        background: var(--surface);
+        border-radius: var(--radius-premium);
+        padding: 1.25rem;
+        border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-premium);
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--brand-dark);
+    }
+
+    /* Main Table Container */
+    .table-card-premium {
+        background: var(--surface);
+        border-radius: var(--radius-premium);
+        border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-premium);
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .table-header-custom {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-soft);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Table Styles */
+    .table-modern {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-modern thead th {
+        background: #fdfdfd;
+        padding: 1rem 1.25rem;
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border-soft);
+        white-space: nowrap;
+    }
+
+    .table-modern td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    /* Adjusted Column Widths to fit screen */
+    .col-customer { min-width: 200px; }
+    .col-toy { min-width: 180px; }
+    .col-qty { width: 60px; }
+    .col-billing { min-width: 110px; }
+    .col-status { min-width: 120px; }
+    .col-date { min-width: 100px; }
+    .col-action { min-width: 160px; }
+
+    .customer-info { display: flex; align-items: center; gap: 10px; }
+    .cust-avatar { width: 36px; height: 36px; border-radius: 10px; background: var(--brand-gradient); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+    .toy-info { display: flex; align-items: center; gap: 10px; }
+    .toy-img-frame { width: 40px; height: 40px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-soft); flex-shrink: 0; }
+    .toy-img-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+    .badge-premium { padding: 4px 10px; border-radius: 50px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .badge-pending { background: #FFF4ED; color: #FF6B35; border: 1px solid #FFEDDF; }
+    .badge-accepted { background: #ECFDF5; color: #10B981; border: 1px solid #D1FAE5; }
+    .badge-paid { background: #EFF6FF; color: #3B82F6; border: 1px solid #DBEAFE; }
+    .badge-rejected { background: #FEF2F2; color: #EF4444; border: 1px solid #FEE2E2; }
+
+    .btn-action-premium { padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; border: none; cursor: pointer; text-decoration: none !important; white-space: nowrap; }
+    .btn-accept { background: var(--brand-teal); color: white !important; }
+    .btn-reject { background: transparent; color: #EF4444 !important; border: 1px solid #EF4444; }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    @media (max-width: 1200px) {
+        .content-wrapper { padding: 1rem !important; }
+    }
+
+    /* Status Select Styles */
+    .status-select-premium {
+        background: #f8faff;
+        border: 1px solid var(--border-soft);
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--brand-dark);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .status-select-premium:focus {
+        border-color: var(--brand-teal);
+        box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+    }
+</style>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <!-- Header Section -->
+        <div class="page-title-section fade-in-up">
+            <div class="page-main-info">
+                <h3>Rental Management</h3>
+                <p>Review and process incoming toy rental requests from your customers.</p>
+            </div>
+            <div class="lux-search-box">
+                <i class="mdi mdi-magnify lux-search-icon"></i>
+                <input type="text" id="orderSearch" class="lux-search-input" placeholder="Search by customer, toy or ID...">
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-grid fade-in-up" style="animation-delay: 0.1s;">
+            <div class="premium-stat-card">
+                <div class="stat-content">
+                    <span class="stat-label">Pending Approval</span>
+                    <span class="stat-value">{{ pending_count|default:"0" }}</span>
+                    <div class="stat-trend" style="color: #FF6B35;">
+                        <i class="mdi mdi-clock-outline"></i> Requires Attention
+                    </div>
+                </div>
+                <div class="stat-icon-wrapper"><i class="mdi mdi-timer-sand"></i></div>
+            </div>
+            <div class="premium-stat-card">
+                <div class="stat-content">
+                    <span class="stat-label">Total Revenue</span>
+                    <span class="stat-value">₹{{ total_revenue|default:"0" }}</span>
+                    <div class="stat-trend" style="color: #4ECDC4;">
+                        <i class="mdi mdi-trending-up"></i> Potential Flow
+                    </div>
+                </div>
+                <div class="stat-icon-wrapper"><i class="mdi mdi-cash-multiple"></i></div>
+            </div>
+            <div class="premium-stat-card">
+                <div class="stat-content">
+                    <span class="stat-label">Paid Orders</span>
+                    <span class="stat-value">{{ paid_count|default:"0" }}</span>
+                    <div class="stat-trend" style="color: #10B981;">
+                        <i class="mdi mdi-check-circle-outline"></i> Successfully Processed
+                    </div>
+                </div>
+                <div class="stat-icon-wrapper"><i class="mdi mdi-package-variant-closed"></i></div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-card-premium fade-in-up" style="animation-delay: 0.2s;">
+            <div class="table-header-custom">
+                <h5>All Rental Requests</h5>
+                <span class="badge-premium badge-paid">{{ total_requests }} Total Orders</span>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto; display: block !important;">
+                <table class="table-modern" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th class="col-customer">Customer Details</th>
+                            <th class="col-toy">Toy Information</th>
+                            <th class="text-center col-qty">Qty</th>
+                            <th class="col-billing">Billing</th>
+                            <th class="col-status">Current Status</th>
+                            <th class="col-date">Date</th>
+                            <th class="text-center col-action">Process</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requests %}
+                        <tr>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="cust-avatar">
+                                        {{ req.first_name|first|upper }}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 font-weight-bold" style="color: var(--brand-dark); font-size: 0.9rem;">{{ req.first_name }} {{ req.last_name }}</h6>
+                                        <div class="d-flex align-items-center" style="gap: 8px; white-space: nowrap;">
+                                            <p class="text-xs text-secondary mb-0">{{ req.phone }}</p>
+                                            <span class="text-secondary" style="font-size: 0.7rem; opacity: 0.5;">|</span>
+                                            <button class="btn btn-link p-0 text-xs font-weight-bold text-primary view-address-btn" 
+                                                    data-name="{{ req.first_name }} {{ req.last_name }}"
+                                                    data-address="{{ req.address }}"
+                                                    data-city="{{ req.city }}"
+                                                    data-pincode="{{ req.pincode }}"
+                                                    data-toggle="modal" 
+                                                    data-target="#addressModal"
+                                                    style="text-decoration: none;">
+                                                <i class="mdi mdi-map-marker-outline"></i> View Address
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="toy-info">
+                                    <div class="toy-img-frame">
+                                        {% if req.toy.image %}
+                                        <img src="{{ req.toy.image.url }}" alt="{{ req.toy.name }}">
+                                        {% else %}
+                                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#eee;">🧸</div>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 font-weight-bold" style="font-size: 0.85rem;">{{ req.toy.name }}</h6>
+                                        <p class="text-xs text-secondary mb-0">SKU: #{{ req.toy.id }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="font-weight-bold" style="color: var(--brand-dark);">{{ req.quantity }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="font-weight-bold" style="color: var(--brand-orange); font-size: 0.9rem;">₹{{ req.total_price }}</span>
+                                    <span class="text-xs text-secondary">₹{{ req.security_deposit }} Deposit</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column" style="gap: 4px;">
+                                    <span class="badge-premium badge-{{ req.status|lower }}">
+                                        <i class="mdi mdi-circle-medium"></i> {{ req.status }}
+                                    </span>
+                                    {% if req.is_extension %}
+                                    <span class="badge" 
+                                          style="background: #EBEBFF; color: #5E5CE6; font-size: 0.55rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-align: center; cursor: pointer;"
+                                          onclick="showExtensionDetails('{{ req.id }}', '{{ req.original_rental.id }}', '{{ req.rental_duration_weeks }}')">
+                                        EXTENSION <i class="mdi mdi-information-outline"></i>
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="text-xs font-weight-bold" style="color: var(--text-secondary);">Start: {{ req.delivery_date|date:"d M, Y" }}</span>
+                                    {% if req.rental_end_date %}
+                                    <span class="text-xs font-weight-bold" style="color: var(--brand-orange);">End: {{ req.rental_end_date|date:"d M, Y" }}</span>
+                                    {% endif %}
+                                    <span class="text-xs font-weight-bold mt-1" style="color: var(--brand-teal);">({{ req.rental_duration_weeks }} Week{{ req.rental_duration_weeks|pluralize }})</span>
+                                    
+                                    <!-- Return Countdown -->
+                                    {% if req.status == 'COMPLETED' or req.status == 'DELIVERING' or req.status == 'SHIPPED' %}
+                                        {% if req.days_remaining is not None %}
+                                            <div class="mt-2 p-1 px-2" style="background: {% if req.days_remaining >= 0 %}#F0FDF4{% else %}#FEF2F2{% endif %}; border-radius: 6px; border: 1px solid {% if req.days_remaining >= 0 %}#DCFCE7{% else %}#FEE2E2{% endif %};">
+                                                <span style="font-size: 10px; font-weight: 800; color: {% if req.days_remaining >= 0 %}#166534{% else %}#991B1B{% endif %};">
+                                                    {% if req.days_remaining > 0 %}
+                                                        {{ req.days_remaining }}d left
+                                                    {% elif req.days_remaining == 0 %}
+                                                        Due Today
+                                                    {% else %}
+                                                        Overdue!
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                {% if req.status == 'PENDING' %}
+                                    {% if user.role != 'ADMIN' %}
+                                    <div style="display:flex; gap:8px; justify-content:center;">
+                                        <a href="{% url 'approve_rental_request' req.id %}" class="btn-action-premium btn-accept" onclick="return confirm('Accept this rental request?')">
+                                            Accept
+                                        </a>
+                                        <a href="{% url 'reject_rental_request' req.id %}" class="btn-action-premium btn-reject" onclick="return confirm('Reject this rental request?')">
+                                            Reject
+                                        </a>
+                                    </div>
+                                    {% else %}
+                                    <div class="badge badge-outline-warning" style="font-size: 9px; font-weight: 800;">PENDING ACTION</div>
+                                    {% endif %}
+                                {% elif req.status == 'REJECTED' %}
+                                    <div class="text-xs font-weight-bold text-danger">
+                                        <i class="mdi mdi-close-circle"></i> REJECTED
+                                    </div>
+                                {% else %}
+                                    <div class="d-flex flex-column align-items-center" style="gap: 5px;">
+                                        <select class="status-select-premium update-status-btn" data-id="{{ req.id }}">
+                                            <option value="ACCEPTED" {% if req.status == 'ACCEPTED' %}selected{% endif %}>Accepted</option>
+                                            <option value="PAID" {% if req.status == 'PAID' %}selected{% endif %}>Paid</option>
+                                            <option value="SHIPPED" {% if req.status == 'SHIPPED' %}selected{% endif %}>Shipped</option>
+                                            <option value="DELIVERING" {% if req.status == 'DELIVERING' %}selected{% endif %}>Arriving</option>
+                                            <option value="COMPLETED" {% if req.status == 'COMPLETED' %}selected{% endif %}>Done</option>
+                                        </select>
+                                        <small class="text-success status-msg-{{ req.id }}" style="font-size: 10px; display: none;">Updated!</small>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div style="opacity: 0.2; margin-bottom: 1rem;"><i class="mdi mdi-package-variant mdi-48px"></i></div>
+                                <h6 class="text-secondary font-weight-bold">No rental requests found</h6>
+                                <p class="text-xs text-secondary">New orders from customers will appear here.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('orderSearch').addEventListener('keyup', function() {
+        const value = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#ordersTable tbody tr');
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? '' : 'none';
+        });
+    });
+
+    // Populate Address Modal using Vanilla JS (to ensure it works before jQuery loads)
+    document.addEventListener('click', function(e) {
+        if (e.target && (e.target.classList.contains('view-address-btn') || e.target.closest('.view-address-btn'))) {
+            const btn = e.target.classList.contains('view-address-btn') ? e.target : e.target.closest('.view-address-btn');
+            
+            const name = btn.getAttribute('data-name');
+            const address = btn.getAttribute('data-address');
+            const city = btn.getAttribute('data-city');
+            const pincode = btn.getAttribute('data-pincode');
+            
+            document.getElementById('modalCustomerName').innerText = name;
+            document.getElementById('modalFullAddress').innerText = address;
+            document.getElementById('modalCityPincode').innerText = city + ' - ' + pincode;
+        }
+    });
+
+    function showExtensionDetails(id, originalId, weeks) {
+        document.getElementById('extIdDisplay').innerText = id;
+        document.getElementById('originalIdDisplay').innerText = originalId;
+        document.getElementById('extWeeksDisplay').innerText = weeks + ' Week(s)';
+        $('#extensionDetailModal').modal('show');
+    }
+
+    // Dynamic Status Update
+    document.querySelectorAll('.update-status-btn').forEach(select => {
+        select.addEventListener('change', function() {
+            const rentalId = this.getAttribute('data-id');
+            const newStatus = this.value;
+            const msgSpan = document.querySelector(`.status-msg-${rentalId}`);
+
+            fetch('{% url "update_rental_status" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `rental_id=${rentalId}&status=${newStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update the status badge in the row
+                    const row = this.closest('tr');
+                    const badge = row.querySelector('.badge-premium');
+                    badge.className = `badge-premium badge-${newStatus.toLowerCase()}`;
+                    badge.innerHTML = `<i class="mdi mdi-circle-medium"></i> ${newStatus}`;
+                    
+                    // Show success message
+                    msgSpan.style.display = 'block';
+                    setTimeout(() => {
+                        msgSpan.style.display = 'none';
+                    }, 2000);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            });
+        });
+    });
+</script>
+
+<!-- Extension Details Modal -->
+<div class="modal fade" id="extensionDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius: 1.25rem; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="background: #EBEBFF; color: #5E5CE6; border-radius: 1.25rem 1.25rem 0 0; border: none; padding: 1rem 1.5rem;">
+                <h6 class="modal-title font-weight-bold"><i class="mdi mdi-calendar-plus mr-1"></i> Extension Info</h6>
+                <button type="button" class="close" data-dismiss="modal" style="color: #5E5CE6;">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="text-xs text-muted text-uppercase font-weight-bold d-block mb-1">Request ID</label>
+                    <span class="font-weight-bold" id="extIdDisplay">#--</span>
+                </div>
+                <div class="mb-3">
+                    <label class="text-xs text-muted text-uppercase font-weight-bold d-block mb-1">Extending Order</label>
+                    <span class="font-weight-bold text-primary" id="originalIdDisplay">#--</span>
+                </div>
+                <div>
+                    <label class="text-xs text-muted text-uppercase font-weight-bold d-block mb-1">Extension Period</label>
+                    <span class="font-weight-bold" style="color: #10B981;" id="extWeeksDisplay">-- Week(s)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Address Modal -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius: 1.5rem; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+            <div class="modal-header" style="background: var(--brand-gradient); color: white; border-radius: 1.5rem 1.5rem 0 0; border: none; padding: 1.5rem 2rem;">
+                <h5 class="modal-title font-weight-bold" id="addressModalLabel">
+                    <i class="mdi mdi-map-marker-radius mr-2"></i> Delivery Location
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.8;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4" style="background: #fff;">
+                <div class="d-flex align-items-center mb-4 p-2">
+                    <div class="cust-avatar mr-3" style="width: 50px; height: 50px; background: #f0fdfa; color: var(--brand-teal); box-shadow: none;">
+                        <i class="mdi mdi-account-details"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 font-weight-bold" id="modalCustomerName" style="color: var(--brand-dark); font-size: 1.1rem;">Customer Name</h6>
+                        <p class="text-xs text-secondary mb-0">Verified Delivery Address</p>
+                    </div>
+                </div>
+                
+                <div style="background: #f8faff; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid rgba(78, 205, 196, 0.1);">
+                    <div class="mb-4">
+                        <label class="text-xs font-weight-bold text-uppercase mb-2 d-block" style="color: var(--brand-teal); letter-spacing: 1px;">Street Address</label>
+                        <div class="d-flex">
+                            <i class="mdi mdi-home-outline mr-2 text-secondary" style="font-size: 1.2rem;"></i>
+                            <p class="text-sm font-weight-medium mb-0" id="modalFullAddress" style="color: var(--brand-dark); line-height: 1.6;">Address details...</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-weight-bold text-uppercase mb-2 d-block" style="color: var(--brand-teal); letter-spacing: 1px;">City & Pincode</label>
+                        <div class="d-flex align-items-center">
+                            <i class="mdi mdi-city-variant-outline mr-2 text-secondary" style="font-size: 1.2rem;"></i>
+                            <p class="text-sm font-weight-bold mb-0" id="modalCityPincode" style="color: var(--brand-dark);">City, Pincode</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-3" style="border: none; justify-content: center;">
+                <button type="button" class="btn btn-action-premium" data-dismiss="modal" style="background: #f3f4f6; color: #4b5563 !important; padding: 10px 30px; border-radius: 12px; width: 100%;">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

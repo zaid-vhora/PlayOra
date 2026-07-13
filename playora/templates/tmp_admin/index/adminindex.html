@@ -1,0 +1,181 @@
+{% extends 'tmp_admin/master.html' %}
+{% load static %}
+{% block content %}
+
+
+        {% comment %} aai thi nathi
+         {% endcomment %}
+        <div class="main-panel">
+          <div class="content-wrapper pb-0">
+            <div class="page-header flex-wrap">
+              <h3 class="mb-0"> Hi, welcome back! <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block">Your web of PLAYORA</span>
+              </h3>
+              <div class="d-flex">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                  <i class="mdi mdi-email btn-icon-prepend"></i> Email </button>
+                {% comment %} <button type="button" class="btn btn-sm bg-white btn-icon-text border ml-3">
+                  <i class="mdi mdi-printer btn-icon-prepend"></i> Print </button> {% endcomment %}
+                <button type="button" class="btn btn-sm ml-3 btn-success"> Add Rental </button>
+              </div>
+            </div>
+              
+            <body class="bg-light">
+              {% csrf_token %}
+
+            <div class="container mt-4">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <h2 class="text-center fw-bold mb-4"> Rental Management</h2>
+
+                <!-- Bootstrap Tabs -->
+                <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
+                            All Renatal
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
+                            Approved Rental
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab">
+                            Rejected Rental
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent"> 
+
+                    <!-- All Rental Tab -->
+                    <div class="tab-pane fade show active" id="all" role="tabpanel">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body">
+                                <h5 class="fw-semibold mb-3">All Registered Rental</h5>
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for rental in custo %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ rental.username }}</td>
+                                                <td>{{ rental.first_name }} {{ rental.last_name }}</td>
+                                                <td>{{ rental.email }}</td>
+                                                <td>{{ rental.phone }}</td>
+                                                <td>
+                                                    {% if rental.is_approved %}
+                                                        <span class="badge bg-success">Approved</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger">Rejected</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if not rental.is_approved %}
+                                                        <a href="{% url 'approve_rental' rental.id %}" class="btn btn-success btn-sm rounded-pill">Approve</a>
+                                                    {% else %}
+                                                        <a href="{% url 'reject_rental' rental.id %}" class="btn btn-danger btn-sm rounded-pill">Reject</a>
+                                                    {% endif %}
+                                                </td> 
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="5" class="text-center text-muted">No users found.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved Users Tab -->
+                    <div class="tab-pane fade" id="approved" role="tabpanel">
+                        <div class="card shadow-sm border-0 rounded-4 mt-3">
+                            <div class="card-body">
+                                <h5 class="fw-semibold mb-3">Approved Rental</h5>
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for rental in approved_rental %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ rental.username }}</td>
+                                                <td>{{ rental.first_name }} {{ rental.last_name }}</td>
+                                                <td>{{ rental.email }}</td>
+                                                <td>{{ rental.phone }}</td>
+                                                <td><span class="badge bg-success">Approved</span></td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="4" class="text-center text-muted">No approved users.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rejected Users Tab -->
+                    <div class="tab-pane fade" id="rejected" role="tabpanel">
+                        <div class="card shadow-sm border-0 rounded-4 mt-3">
+                            <div class="card-body">
+                                <h5 class="fw-semibold mb-3">Rejected Renatl</h5>
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead class="table-danger">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for rental in rejected_rental %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ rental.username }}</td>
+                                                <td>{{ rental.first_name }} {{ rental.last_name }}</td>
+                                                <td>{{ rental.email }}</td>
+                                                <td>{{ rental.phone }}</td>
+                                                <td><span class="badge bg-secondary">Pending/Rejected</span></td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="4" class="text-center text-muted">No rejected rental.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            </body>
+
+         {% endblock %}
