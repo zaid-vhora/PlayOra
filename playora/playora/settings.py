@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-i80ms&-+c*lun&dyyw^9q67)+svsl0+a28wi998waq1$nkfrgo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "playora-toys-11y8.onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
