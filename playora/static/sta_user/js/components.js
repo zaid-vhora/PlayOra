@@ -132,10 +132,10 @@ function getFooter() {
           </a>
           <p class="footer-desc">India's premier toy rental platform. Giving every child access to the best toys without the burden of ownership. Sustainable, affordable, and magical.</p>
           <div class="footer-socials">
-            //  <a href="#" class="social-btn" aria-label="Facebook">📘</a>
-            //  <a href="#" class="social-btn" aria-label="Instagram">📸</a>
-            //  <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
-            //  <a href="#" class="social-btn" aria-label="YouTube">▶️</a>
+            <a href="#" class="social-btn" aria-label="Facebook">📘</a>
+            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+            <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+            <a href="#" class="social-btn" aria-label="YouTube">▶️</a>
             <a href="https://wa.me/919316685580" class="social-btn" aria-label="WhatsApp">💬</a>
           </div>
         </div>
