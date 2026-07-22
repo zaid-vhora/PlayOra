@@ -186,7 +186,7 @@ function getFooter() {
     <div style="background:rgba(0,0,0,0.2)">
       <div class="container">
         <div class="footer-bottom">
-          <p class="footer-copy">© 2025 <span>PLAYORA</span>. Made with ❤️ for little ones everywhere.</p>
+          <p class="footer-copy">© 2025 <span>PLAYORA</span>. Made By Zaid Vhora .</p>
           <div class="footer-bottom-links">
             <a href="#" class="footer-bottom-link">Privacy Policy</a>
             <a href="#" class="footer-bottom-link">Terms of Service</a>
